@@ -1,3 +1,7 @@
 from django.contrib import admin
+from studentApp.models import Student, StudentWorkHistory,EnrolledCourse,EnrolledModule
 
-# Register your models here.
+admin.site.register(Student)
+admin.site.register(EnrolledCourse)
+admin.site.register(EnrolledModule)
+admin.site.register(StudentWorkHistory)

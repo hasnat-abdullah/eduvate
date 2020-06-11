@@ -1,3 +1,5 @@
 from django.contrib import admin
+from appointmentApp.models import SlotList, Booking
 
-# Register your models here.
+admin.site.register(SlotList)
+admin.site.register(Booking)

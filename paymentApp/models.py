@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from courseApp.models import CourseModule
 from eduvate import settings
 
@@ -29,4 +28,4 @@ class Payment(models.Model):
     payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='incomplete')
 
     def __str__(self):
-        return self.user_id.username+","+self.payment_method +"-"+ self.paid_amount +"tk -"+ self.txn_id
+        return self.user_id.name+","+self.payment_method +"-"+ self.paid_amount +"tk -"+ self.txn_id

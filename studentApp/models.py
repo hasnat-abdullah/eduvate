@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from datetime import datetime
 from instructorApp.models import Country
 from courseApp.models import Course,CourseModule
@@ -9,7 +8,6 @@ from eduvate import settings
 
 class Student(models.Model):
     name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    mobile = models.CharField(max_length=15)
     age = models.PositiveSmallIntegerField()
     details = models.TextField(max_length=250)
     city = models.TextField(max_length=50)
@@ -19,7 +17,7 @@ class Student(models.Model):
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.name.username
+        return self.name.display_name
 
 
 class StudentWorkHistory(models.Model):
@@ -30,7 +28,7 @@ class StudentWorkHistory(models.Model):
     end_date = models.DateField(default=None, blank=True)
 
     def __str__(self):
-        return self.student_id.name.username+","+self.designation
+        return self.student_id.name.display_name+","+self.designation
 
 
 ENROLMENT_STATUS_CHOICES = (
@@ -59,4 +57,4 @@ class EnrolledModule(models.Model):
     last_visited_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.course_id.name + " - " + self.student_id.name.username
+        return self.module_id.name + " - " + self.enrolled_id.name
