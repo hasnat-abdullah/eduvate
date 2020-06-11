@@ -4,10 +4,11 @@ from datetime import datetime
 from instructorApp.models import Country
 from courseApp.models import Course,CourseModule
 from paymentApp.models import Payment
+from eduvate import settings
 
 
 class Student(models.Model):
-    name = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mobile = models.CharField(max_length=15)
     age = models.PositiveSmallIntegerField()
     details = models.TextField(max_length=250)

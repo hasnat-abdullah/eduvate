@@ -1,7 +1,48 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy as _
+from .managers import UserManager
 from datetime import datetime
-#from courseApp.models import
+from eduvate import settings
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    mobile = models.CharField(max_length=15, unique=True)
+    display_name = models.CharField(max_length=140)
+    date_joined = models.DateTimeField(default=datetime.now)
+    is_active = models.BooleanField(default=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "mobile"
+    REQUIRED_FIELDS = ["display_name",]
+
+    def __str__(self):
+        return self.display_name
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    def get_name(self):
+        return self.display_name
+
+    def get_short_name(self):
+        '''
+        Returns the short name for the user.
+        '''
+        first_name = self.display_name.split()[0]
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        '''
+        Sends an email to this User.
+        '''
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
 class Country(models.Model):
@@ -12,7 +53,7 @@ class Country(models.Model):
 
 
 class Instructor(models.Model):
-    name = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     mobile = models.CharField(max_length=15)
     details = models.TextField(max_length=250)
     city = models.TextField(max_length=50)

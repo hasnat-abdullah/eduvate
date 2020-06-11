@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from courseApp.models import CourseModule
+from eduvate import settings
 
 PAYMENT_STATUS_CHOICES = (
         ('completed', 'COMPLETED'),
@@ -19,7 +20,7 @@ PAYMENT_METHOD_CHOICE= (
 
 
 class Payment(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     paid_for_module= models.ForeignKey(CourseModule, on_delete=models.PROTECT)
     payment_method = models.CharField(max_length=6, choices=PAYMENT_METHOD_CHOICE, default='bkash')
     paid_amount = models.DecimalField(max_digits=8 ,decimal_places=2)
