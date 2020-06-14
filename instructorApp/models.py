@@ -65,7 +65,7 @@ class InstructorWorkHistory(models.Model):
     end_date = models.DateField(default=None, blank=True)
 
     def __str__(self):
-        return self.instructor_id.name.username+","+self.designation
+        return self.instructor_id.name.mobile+","+self.designation
 
 
 class InstructorRating (models.Model):
@@ -74,4 +74,4 @@ class InstructorRating (models.Model):
     rating_total_value = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.instructor_id.name.username + "-"+self.rating_count
+        return self.instructor_id.name.mobile + "-"+self.rating_count

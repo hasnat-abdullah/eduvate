@@ -69,8 +69,8 @@
                         </div>
 
 						<ul class="nav navbar-nav d-none d-lg-flex pl-2">
-                            <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-							<li class="nav-item"><a href="{% static 'courses.html' %}" class="nav-link">Courses</a></li>
+                            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
+							<li class="nav-item"><a href="{% url 'course' %}" class="nav-link">Courses</a></li>
 							<li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
                         </ul>
 
@@ -86,9 +86,8 @@
 
 
                         <div >
-                            <button type="button" class="btn btn-light">
-                                 <i class="material-icons mr-1">lock_open</i>Login
-                            </button>
+                            <a href="{% url 'login' %}" class="btn btn-light ml-3"><i class="material-icons">lock_open</i> Login</a>
+
 
                         </div>
 
@@ -114,7 +113,7 @@
                                         </g>
                                     </svg>
                                 </span>
-                                LEMA
+                                CMHCB
                             </a>
                         </div>
                         <div class="col-md-9">
@@ -197,7 +196,7 @@
             <div class="sidebar sidebar-light sidebar-left bg-white" data-perfect-scrollbar>
 
 
-                <div class="sidebar-heading">LEMA</div>
+                <div class="sidebar-heading">CMHCB</div>
                 <div class="sidebar-block p-0">
                     <ul class="sidebar-menu" id="components_menu">
                         <li class="sidebar-menu-item">

@@ -13,29 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.conf.urls import url,include
-from eduvate import views
+from studentApp import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index, name='index'),
-    url(r'^login', views.login, name='login'),
-    url(r'^signup', views.signup, name='signup'),
-    url(r'^course', views.course, name='course'),
-    url(r'^payment', views.payment, name='payment'),
-    url(r'^student/', include('studentApp.urls')),
-    url(r'^course/', include('courseApp.urls')),
-    url(r'^appointment/', include('appointmentApp.urls')),
-    url(r'^exam/', include('examApp.urls')),
-    url(r'^instructor/', include('instructorApp.urls')),
-    url(r'^payment/', include('paymentApp.urls')),
-    url(r'^blog/', include('blogApp.urls')),
+    #url(r'^dashboard', views.dashboard, name='payment'),
+    url(r'^courses', views.Courses.as_view(), name='courses'),
+    # url(r'^Profile', views.payment, name='payment'),
+    # url(r'^billing', views.payment, name='payment'),
+    # url(r'^payment', views.payment, name='payment'),
 
 
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
