@@ -29,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'instructorApp.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,7 +84,7 @@ WSGI_APPLICATION = 'eduvate.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'eduvate',
         'USER': 'postgres',
         'PASSWORD': '12345',

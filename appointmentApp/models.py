@@ -31,4 +31,4 @@ class Booking (models.Model):
     note = models.CharField(max_length=150)
 
     def __str__(self):
-        return self.counselor.name.username+"; "+ self.booking_date + ": " + self.slot_id.from_time +"-"+self.slot_id.to_time
+        return self.booked_by.name.username+"; "+ str(self.booking_date) + ": " + str(self.slot_id.from_time) +"-"+ str(self.slot_id.to_time)

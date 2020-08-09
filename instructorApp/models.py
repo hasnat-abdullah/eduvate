@@ -1,39 +1,8 @@
-from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from .managers import UserManager
 from datetime import datetime
 from eduvate import settings
-
-
-class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    mobile = models.CharField(max_length=15, unique=True)
-    display_name = models.CharField(max_length=140)
-    date_joined = models.DateTimeField(default=datetime.now)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-    objects = UserManager()
-
-    USERNAME_FIELD = "mobile"
-    REQUIRED_FIELDS = ["display_name",]
-
-    def __str__(self):
-        return self.display_name
-
-    class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
-
-    def get_name(self):
-        return self.display_name
-
-    def get_short_name(self):
-        short_name = self.display_name.split()[0]
-        return short_name
 
 
 class Country(models.Model):
@@ -44,7 +13,7 @@ class Country(models.Model):
 
 
 class Instructor(models.Model):
-    name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.OneToOneField(User, on_delete=models.CASCADE)
     details = models.TextField(max_length=250)
     city = models.TextField(max_length=50)
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
@@ -65,7 +34,7 @@ class InstructorWorkHistory(models.Model):
     end_date = models.DateField(default=None, blank=True)
 
     def __str__(self):
-        return self.instructor_id.name.mobile+","+self.designation
+        return self.instructor_id.name.username+","+self.designation
 
 
 class InstructorRating (models.Model):
@@ -74,4 +43,4 @@ class InstructorRating (models.Model):
     rating_total_value = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.instructor_id.name.mobile + "-"+self.rating_count
+        return self.instructor_id.name.username + "-"+self.rating_count
