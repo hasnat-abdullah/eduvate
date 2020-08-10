@@ -1,5 +1,6 @@
 from django.db import models
 from instructorApp.models import Instructor
+from scaleApp.models import MeasuringScale
 
 
 class Language(models.Model):
@@ -91,6 +92,7 @@ class PathCourse(models.Model):
 class CourseModule(models.Model):
     course = models.ManyToManyField(Course)
     name = models.CharField(max_length=250, null=False)
+    how_many_time_weekly_accessable = models.PositiveSmallIntegerField(null=False,default=1)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
@@ -110,32 +112,11 @@ class Lesson(models.Model):
         return self.module_id.course.name +": "+ self.module_id.name + " - " + self.title
 
 
-class AnalyzeLevelMeter(models.Model):
-    module_id = models.ManyToManyField(CourseModule)
-    title = models.CharField(max_length=150)
-    description = models.TextField(max_length=500)
+class MeasuringScaleForModule(models.Model):
+    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE)
+    scale_name = models.ManyToManyField(MeasuringScale)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.title
-
-
-class QuestionDetails:
-    ANSWER_CHOICES = (
-        ('0', 'কখনোই না'),
-        ('1', 'অনেকাংশে না'),
-        ('2', 'মাঝে মাঝে'),
-        ('3', 'প্রায়শই'),
-        ('4', 'ঘনঘন'),
-    )
-    AnalyzeLevelMeter_id= models.ForeignKey(AnalyzeLevelMeter, on_delete=models.CASCADE)
-    serial = models.PositiveSmallIntegerField(blank=False, default=1)
-    question = models.CharField(max_length=800, null=False)
-    year_in_school = models.CharField(max_length=15,choices=ANSWER_CHOICES,default=None)
-    created_on = models.DateField(auto_now=False, auto_now_add=True)
-    updated_on = models.DateField(auto_now=True, auto_now_add=False)
-
-    def __str__(self):
-        return self.AnalyzeLevelMeter_id.module_id.course.name +": "+ self.AnalyzeLevelMeter_id.module_id.name + " - " + self.question
-
+        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.scale_name.name

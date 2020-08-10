@@ -4,6 +4,7 @@ from datetime import datetime
 from instructorApp.models import Country
 from courseApp.models import Course,CourseModule
 from paymentApp.models import Payment
+from scaleApp.models import MeasuringScale
 from eduvate import settings
 
 class StudentManager(models.Manager):
@@ -62,3 +63,13 @@ class EnrolledModule(models.Model):
 
     def __str__(self):
         return self.module_id.name + " - " + self.enrolled_id.name
+
+
+class MeasuringScaleForModuleResult(models.Model):
+    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE)
+    scale_name = models.ManyToManyField(MeasuringScale)
+    totalMarks = models.PositiveSmallIntegerField()
+    created_on = models.DateField(auto_now=False, auto_now_add=True)
+
+    def __str__(self):
+        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.scale_name.name
