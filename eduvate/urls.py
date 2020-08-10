@@ -21,11 +21,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index, name='index'),
-    url(r'^login', views.login, name='login'),
-    url(r'^signup', views.signup, name='signup'),
-    url(r'^course', views.course, name='course'),
-    url(r'^payment', views.payment, name='payment'),
+    url(r'^$', views.getIndex, name='index'),
+    url(r'^login', views.getLogin, name='login'),
+    url(r'^signup', views.getSignup, name='signup'),
+    url(r'^course', views.getCourse, name='course'),
+    url(r'^payment', views.getPayment, name='payment'),
     url(r'^student/', include('studentApp.urls')),
     url(r'^course/', include('courseApp.urls')),
     url(r'^appointment/', include('appointmentApp.urls')),

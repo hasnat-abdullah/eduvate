@@ -1,20 +1,24 @@
 {% extends 'base_auth.html' %}
 {% load static %}
-{% block title %}Login - CMHCB {% endblock %}
+{% block title %}Signup - CMHCB {% endblock %}
 {% block stylesheet %}{% endblock %}
- {% block message %}
-            <div class="alert alert-soft-success d-flex" role="alert">
-                <i class="material-icons mr-3">check_circle</i>
-                <div class="text-body">reset instructions.</div>
-            </div>
+{% block message %}
+     {% if messages %}
+         <div class="alert alert-soft-danger d-flex" role="alert">
+                {% for message in messages %}
+                    <div class="text-body">{{ message }}</div>
+                {% endfor %}
+         </div>
+     {% endif %}
 {% endblock %}
-{% block content %}
 
-            <form action="{% url 'index' %}" novalidate>
+{% block content %}
+            <form action="{% url 'signup' %}" method="POST">
+                {% csrf_token %}
                 <div class="form-group">
-                    <label class="text-label" for="name_2">Full Name:</label>
+                    <label class="text-label" for="{{ form.first_name.id_for_label }}">Full Name:</label>
                     <div class="input-group input-group-merge">
-                        <input id="name_2" type="text" required="" class="form-control form-control-prepended" placeholder="Hasnat Abdullah">
+                        {{ form.full_name }}
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="far fa-user"></span>
@@ -22,21 +26,42 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="{{ form.age.id_for_label }}">Age</label>
+                        {{ form.age }}
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="{{ form.city.id_for_label }}">City</label>
+                        {{ form.city }}
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label class="text-label" for="email_2">Mobile Number:</label>
+                    <label for="{{ form.country.id_for_label }}">Country</label>
                     <div class="input-group input-group-merge">
-                        <input id="phone_2" type="number" required="" class="form-control form-control-prepended" placeholder="017XXXXXXXX">
+                        {{ form.country }}
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <span class="far fa-phone-alt"></span>
+                                <span class="far fa-map"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="text-label" for="password_2">Password:</label>
+                    <label class="text-label" for="{{ form.username.id_for_label }}">Mobile Number:</label>
                     <div class="input-group input-group-merge">
-                        <input id="password_2" type="password" required="" class="form-control form-control-prepended" placeholder="Enter your password">
+                        {{ form.username }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="far fa-mobile"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-label" for="{{ form.password.id_for_label }}">Password:</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.password }}
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="material-icons">lock</span>
@@ -46,8 +71,9 @@
                 </div>
                 <div class="form-group mb-2 text-center">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" checked="" class="custom-control-input" id="terms" />
-                        <label class="custom-control-label" for="terms">I accept <a href="#">Terms and Conditions</a></label>
+                        {{ form.check }}
+                        <!--<input type="checkbox" checked="" class="custom-control-input" id="terms" />-->
+                        <label class="custom-control-label" for="{{ form.check.id_for_label }}">I accept <a href="#">Terms and Conditions</a></label>
                     </div>
                 </div>
                 <div class="form-group text-center">

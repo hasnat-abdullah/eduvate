@@ -2,19 +2,24 @@
 {% load static %}
 {% block title %}Login - CMHCB {% endblock %}
 {% block stylesheet %}{% endblock %}
- {% block message %}
-            <div class="alert alert-soft-success d-flex" role="alert">
-                <i class="material-icons mr-3">check_circle</i>
-                <div class="text-body">reset instructions.</div>
-            </div>
+{% block message %}
+     {% if messages %}
+         <div class="alert alert-soft-danger d-flex" role="alert">
+                {% for message in messages %}
+                    <div class="text-body">{{ message }}</div>
+                {% endfor %}
+         </div>
+     {% endif %}
 {% endblock %}
+
 {% block content %}
 
-            <form action="index.html" novalidate>
+            <form action="" method="POST">
+            {%  csrf_token %}
                 <div class="form-group">
-                    <label class="text-label" for="phone_2">Mobile Number:</label>
+                    <label class="text-label" for="user">Mobile Number:</label>
                     <div class="input-group input-group-merge">
-                        <input id="phone_2" type="number" required="" class="form-control form-control-prepended" placeholder="017XXXXXXXX">
+                        <input name="user" type="number" required="true" class="form-control form-control-prepended" placeholder="017XXXXXXXX">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="far fa-mobile-alt"></span>
@@ -23,9 +28,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="text-label" for="password_2">Password:</label>
+                    <label class="text-label" for="password">Password:</label>
                     <div class="input-group input-group-merge">
-                        <input id="password_2" type="password" required="" class="form-control form-control-prepended" placeholder="Enter your password">
+                        <input name="password" type="password" required="" class="form-control form-control-prepended" placeholder="Enter your password">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <span class="fa fa-key"></span>
