@@ -16,7 +16,7 @@
 
             <form action="" method="POST">
             {%  csrf_token %}
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="text-label" for="user">Mobile Number:</label>
                     <div class="input-group input-group-merge">
                         <input name="user" type="number" required="true" class="form-control form-control-prepended" placeholder="017XXXXXXXX">
@@ -38,18 +38,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mb-1">
+                <div class="form-group mb-3">
                     <button class="btn btn-block btn-primary" type="submit">Login</button>
                 </div>
-                <div class="form-group text-center">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" checked="" id="remember">
-                        <label class="custom-control-label" for="remember">Remember me for 30 days</label>
-                    </div>
-                </div>
                 <div class="form-group text-center mb-0">
-                    <a href="">Forgot password?</a> <br>
-                    Don't have an account? <a class="text-underline" href="{% url 'signup' %}">Sign up</a>
+                    <a href=""><i>Forgot password?</i></a> <br><br>
+                    Don't have an account? <a class="text-underline" href="{% url 'signup' %}"><b>Sign up</b></a>
                 </div>
             </form>
 

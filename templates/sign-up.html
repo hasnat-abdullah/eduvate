@@ -15,7 +15,7 @@
 {% block content %}
             <form action="{% url 'signup' %}" method="POST">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="text-label" for="{{ form.first_name.id_for_label }}">Full Name:</label>
                     <div class="input-group input-group-merge">
                         {{ form.full_name }}
@@ -36,7 +36,7 @@
                         {{ form.city }}
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label for="{{ form.country.id_for_label }}">Country</label>
                     <div class="input-group input-group-merge">
                         {{ form.country }}
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="text-label" for="{{ form.username.id_for_label }}">Mobile Number:</label>
                     <div class="input-group input-group-merge">
                         {{ form.username }}
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="text-label" for="{{ form.password.id_for_label }}">Password:</label>
                     <div class="input-group input-group-merge">
                         {{ form.password }}
