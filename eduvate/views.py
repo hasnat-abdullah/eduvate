@@ -7,8 +7,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 def getIndex(request):
-    #return HttpResponse("HEllo Python")
+
     return render(request, 'index.html')
+
+
+def getDashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'lms/student-dashboard.html')
 
 
 def getSignup(request):
@@ -79,7 +85,7 @@ def getLogin(request):
             auth = authenticate(request, username=user, password=password)
             if auth is not None:
                 login(request, auth)
-                return redirect('index')
+                return redirect('dashboard')
             else:
                 messages.add_message(request, messages.ERROR, "Username or Password Mismatch")
     #if request.method == 'POST' and request.user.is_authenticated == False:

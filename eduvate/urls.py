@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^$', views.getIndex, name='index'),
     url(r'^login', views.getLogin, name='login'),
     url(r'^signup', views.getSignup, name='signup'),
+    url(r'^logout', views.getLogout, name='logout'),
+    url(r'^dashboard', views.getDashboard, name='dashboard'),
     url(r'^course', views.getCourse, name='course'),
     url(r'^payment', views.getPayment, name='payment'),
     url(r'^student/', include('studentApp.urls')),

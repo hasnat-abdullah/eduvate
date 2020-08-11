@@ -109,7 +109,7 @@ class Lesson(models.Model):
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.title
+        return  self.title
 
 
 class MeasuringScaleForModule(models.Model):
@@ -119,4 +119,4 @@ class MeasuringScaleForModule(models.Model):
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.scale_name.name
+        return self.module_id.name +": "+ self.module_id.name + " - " + self.scale_name.name

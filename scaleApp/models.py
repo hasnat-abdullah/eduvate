@@ -12,7 +12,7 @@ class MeasuringScale(models.Model):
         return self.name
 
 
-class QuestionDetails:
+class QuestionDetails(models.Model):
     ANSWER_CHOICES = (
         ('0', 'কখনোই না'),
         ('1', 'অনেকাংশে না'),
@@ -21,7 +21,7 @@ class QuestionDetails:
         ('4', 'ঘনঘন'),
     )
     scale_id= models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
-    serial = models.AutoField()
+    serial = models.SmallIntegerField(null=False, default=1)
     question = models.CharField(max_length=800, null=False)
     answer = models.CharField(max_length=15,choices=ANSWER_CHOICES,default=None)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
