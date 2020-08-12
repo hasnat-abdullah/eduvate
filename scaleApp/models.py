@@ -13,19 +13,21 @@ class MeasuringScale(models.Model):
 
 
 class QuestionDetails(models.Model):
-    ANSWER_CHOICES = (
-        ('0', 'কখনোই না'),
-        ('1', 'অনেকাংশে না'),
-        ('2', 'মাঝে মাঝে'),
-        ('3', 'প্রায়শই'),
-        ('4', 'ঘনঘন'),
-    )
     scale_id= models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
     serial = models.SmallIntegerField(null=False, default=1)
     question = models.CharField(max_length=800, null=False)
-    answer = models.CharField(max_length=15,choices=ANSWER_CHOICES,default=None)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return self.scale_id.name +": "+ self.question
+
+
+class AnswerDetails(models.Model):
+    scale_id= models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
+    choice = models.CharField(max_length=30,null=False)
+    serial = models.SmallIntegerField(null=False, default=1)
+    value = models.SmallIntegerField(null=False, default=1)
+
+    def __str__(self):
+        return self.scale_id.name +": "+ self.choice

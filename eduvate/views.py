@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from studentApp.models import Student
+from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails
 from django.http import HttpResponseRedirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
@@ -15,6 +16,21 @@ def getDashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
     return render(request, 'lms/student-dashboard.html')
+
+
+def getScale(request, scaleId):
+    scale = get_object_or_404(MeasuringScale,id=scaleId)
+    question = QuestionDetails.objects.filter(scale_id=scale.id).order_by('serial')
+    answer = AnswerDetails.objects.filter(scale_id=scale.id).order_by('serial')
+    context = {
+        'scale': scale,
+        'question': question,
+        'answer': answer,
+    }
+    if request.user.is_authenticated:
+        return render(request, 'scale.html',context)
+    else:
+        return render(request, 'scale_guest.html',context)
 
 
 def getSignup(request):
