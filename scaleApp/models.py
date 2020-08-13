@@ -31,3 +31,13 @@ class AnswerDetails(models.Model):
 
     def __str__(self):
         return self.scale_id.name +": "+ self.choice
+
+
+class ScoringDetails(models.Model):
+    scale_id= models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
+    from_value = models.SmallIntegerField(null=False, default=0)
+    to_value = models.SmallIntegerField(null=False, default=0)
+    result = models.CharField(max_length=40, null=False,default="Minimal")
+
+    def __str__(self):
+        return self.scale_id.name +": "+ self.result

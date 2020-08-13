@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from studentApp.models import Student
-from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails
+from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails,ScoringDetails
 from django.http import HttpResponseRedirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
@@ -22,10 +22,12 @@ def getScale(request, scaleId):
     scale = get_object_or_404(MeasuringScale,id=scaleId)
     question = QuestionDetails.objects.filter(scale_id=scale.id).order_by('serial')
     answer = AnswerDetails.objects.filter(scale_id=scale.id).order_by('serial')
+    score = ScoringDetails.objects.filter(scale_id=scale.id).order_by('-to_value')
     context = {
         'scale': scale,
         'question': question,
         'answer': answer,
+        'score':score,
     }
     if request.user.is_authenticated:
         return render(request, 'scale.html',context)

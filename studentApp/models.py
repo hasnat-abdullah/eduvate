@@ -2,15 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 from instructorApp.models import Country
-from courseApp.models import Course,CourseModule
+from courseApp.models import Course, CourseModule
 from paymentApp.models import Payment
 from scaleApp.models import MeasuringScale
 from eduvate import settings
+
 
 class StudentManager(models.Manager):
     def create_student(self, username,age,city,country):
         student = self.create(name=username,age=age,city=city,country=country)
         return student
+
 
 class Student(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,6 +26,7 @@ class Student(models.Model):
         return self.name.username
 
     objects = StudentManager()
+
 
 class StudentWorkHistory(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -66,7 +69,8 @@ class EnrolledModule(models.Model):
 
 
 class MeasuringScaleForModuleResult(models.Model):
-    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE, default=-1)
     scale_name = models.ManyToManyField(MeasuringScale)
     totalMarks = models.PositiveSmallIntegerField()
     created_on = models.DateField(auto_now=False, auto_now_add=True)

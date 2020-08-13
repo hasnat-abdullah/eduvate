@@ -37,14 +37,14 @@
                                             <td>{{ q.serial }}</td>
                                             <td>{{ q.question }}</td>
                                             {% for i in answer %}
-                                            <td style="text-align: center;"><input type="radio" name="{{ q.id }}" id="{{ i.value }}"></td>
+                                            <td style="text-align: center;"><input type="radio" name="{{ q.id }}" id="{{ i.value }} required "></td>
                                             {% endfor %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
                             <div class="form-group text-center mb-3">
-                                <button type="button" class="btn btn-lg btn-block btn-success" data-toggle="modal" data-target="#modal-success"><b>Submit</b></button>
+                                <button type="submit" class="btn btn-lg btn-block btn-success" data-toggle="modal" data-target="#modal-success"><b>Submit</b></button>
                             </div>
                             </div>
                         </div>
