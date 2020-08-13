@@ -29,6 +29,7 @@ urlpatterns = [
     path('dashboard', views.getDashboard, name='dashboard'),
     path('course', views.getCourse, name='course'),
     path('scale/<int:scaleId>/', views.getScale, name='scale'),
+    path('save_score/<int:scaleId>/', views.getSaveScore, name='saveScore'),
     path('payment', views.getPayment, name='payment'),
     path('student/', include('studentApp.urls')),
     path('course/', include('courseApp.urls')),

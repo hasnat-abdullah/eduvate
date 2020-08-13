@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from studentApp.models import Student
+from studentApp.models import Student,MeasuringScaleForModuleResult
 from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails,ScoringDetails
 from django.http import HttpResponseRedirect
 from .forms import RegisterForm
@@ -15,6 +15,21 @@ def getIndex(request):
 def getDashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
+    return render(request, 'lms/student-dashboard.html')
+
+
+def getSaveScore(request,scaleId):
+    if request.user.is_authenticated:
+        user= request.user.username
+        scale = get_object_or_404(MeasuringScale, id=scaleId)
+        scaleScore = request.POST["score"]
+        scaleToSave = MeasuringScaleForModuleResult.objects.create_score(
+            request.user,
+            scale,
+            request.POST["score"],
+        )
+        scaleToSave.save()
+        return redirect('dashboard')
     return render(request, 'lms/student-dashboard.html')
 
 

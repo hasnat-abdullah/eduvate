@@ -5,6 +5,7 @@ from instructorApp.models import Country
 from courseApp.models import Course, CourseModule
 from paymentApp.models import Payment
 from scaleApp.models import MeasuringScale
+from datetime import datetime
 from eduvate import settings
 
 
@@ -68,12 +69,19 @@ class EnrolledModule(models.Model):
         return self.module_id.name + " - " + self.enrolled_id.name
 
 
+class ScoreManager(models.Manager):
+    def create_score(self, username, scale_name, totalMarks):
+        studentScore = self.create(user_id=username,scale_name=scale_name,totalMarks=totalMarks,created_on=datetime.now)
+        return studentScore
+
+
 class MeasuringScaleForModuleResult(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE, default=-1)
-    scale_name = models.ManyToManyField(MeasuringScale)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    scale_name = models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
     totalMarks = models.PositiveSmallIntegerField()
     created_on = models.DateField(auto_now=False, auto_now_add=True)
 
     def __str__(self):
-        return self.module_id.course.name +": "+ self.module_id.name + " - " + self.scale_name.name
+        return self.user_id.username +": "+ str(self.created_on)
+
+    objects=ScoreManager()

@@ -21,7 +21,8 @@
 
 
                             <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
-                                <form class="radio-button-form">
+                                <form class="radio-button-form" method="POST">
+                                {%  csrf_token %}
                                     <table class="table mb-0 thead-border-top-0">
                                         <thead>
                                         <tr>
@@ -102,6 +103,21 @@
                 document.getElementById("score").innerHTML = "Score: "+total;
                 document.getElementById("level").innerHTML = "Depression Level: "+result;
                 $("#modal-success").modal();
+                //Data send to server to save
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'saveScore' scaleId=scale.id %}',
+                    data: {
+                        score: total,
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success:function() {
+                        console.log("success");
+                    },
+                    error: function(data) {
+                        console.log("error");
+                    }
+                });
                 e.preventDefault();
             }
         });
