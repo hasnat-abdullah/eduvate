@@ -46,8 +46,21 @@ INSTALLED_APPS = [
     'blogApp',
     'paymentApp',
     'appointmentApp',
-    'scaleApp'
+    'scaleApp',
+
+    #3rd party App
+    'ckeditor',
+    'ckeditor_uploader',
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 200,
+        'width': 850,
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,8 +148,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR, "static"),
+STATICFILES_DIRS=[os.path.join(BASE_DIR, "static"),
 ]
 
 

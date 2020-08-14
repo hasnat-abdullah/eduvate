@@ -1,7 +1,8 @@
 from django.db import models
 from instructorApp.models import Instructor
 from scaleApp.models import MeasuringScale
-
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 class Language(models.Model):
     name = models.CharField(max_length=50)
@@ -31,16 +32,16 @@ class CourseLevel(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=250, null=False)
-    short_description = models.TextField(null=False)
-    long_description = models.TextField(null=False)
+    short_description = RichTextUploadingField()
+    long_description = RichTextUploadingField()
     featured_image = models.ImageField(default='default', upload_to='image/courseImage', blank=True)
     featured_video = models.URLField(max_length = 200)
     course_lang = models.ForeignKey(Language, on_delete=models.PROTECT)
     requirement = models.CharField(max_length=500)
     pre_requisite = models.CharField(max_length=500)
     level = models.ForeignKey(CourseLevel, on_delete=models.PROTECT)
-    what_u_will_learn = models.TextField(null=False)
-    course_hours = models.TimeField()
+    what_u_will_learn = RichTextField
+    course_hours = models.CharField(max_length=20)
     course_Lectures = models.IntegerField()
 
     total_student_enrolled = models.PositiveIntegerField()
@@ -67,8 +68,8 @@ class CourseInstructor(models.Model):
 
 class LearningPath(models.Model):
     name = models.CharField(max_length=250, null=False)
-    short_description = models.TextField(null=False)
-    long_description = models.TextField(null=False)
+    short_description = RichTextUploadingField()
+    long_description = RichTextUploadingField()
     level = models.ForeignKey(CourseLevel, on_delete=models.PROTECT)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
@@ -91,6 +92,7 @@ class PathCourse(models.Model):
 
 class CourseModule(models.Model):
     course = models.ManyToManyField(Course)
+    module_position = models.SmallIntegerField(null=False)
     name = models.CharField(max_length=250, null=False)
     how_many_time_weekly_accessable = models.PositiveSmallIntegerField(null=False,default=1)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
@@ -102,14 +104,15 @@ class CourseModule(models.Model):
 
 class Lesson(models.Model):
     module_id = models.ManyToManyField(CourseModule)
+    lesson_position = models.SmallIntegerField(null=False)
     title = models.CharField(max_length=250, null=False)
     video = models.URLField(max_length=300)
-    description = models.TextField(max_length=10000)
+    description = RichTextUploadingField()
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return  self.title
+        return str(self.module_id.name) +": "+ self.title
 
 
 class MeasuringScaleForModule(models.Model):
