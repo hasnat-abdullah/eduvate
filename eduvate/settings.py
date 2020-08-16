@@ -23,12 +23,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 SECRET_KEY = 'oer7^lh+%d-xvw22!6fk6w)zwrklz=q$giu2thps=99z*gt=rc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['monerdr.herokuapp.com','127.0.0.1',]
 
 # Application definition
 
@@ -149,13 +152,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATICFILES_DIRS=[os.path.join(BASE_DIR, "static_dir"),
-]
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+#STATICFILES_DIRS=[os.path.join(BASE_DIR, "static_dir"),
+#]
 
 
 

@@ -5,50 +5,50 @@
 {% block stylesheet %}{% endblock %}
 {% block content %}
 
-<div class="mdk-header-layout__content page">
+    <div class="mdk-header-layout__content page">
+
+    <div class="container page__container">
+
+    <div class="card card-form">
+        <div class=" card-body">
+            <h4><strong class="card-header__title m-0">{{scale.name}}</strong></h4>
+            <p class="text-muted">{{scale.description}}</p>
+        </div>
+        <div class="card-form__body">
 
 
-
-            <div class="container page__container">
-
-                <div class="card card-form">
-                        <div class=" card-body">
-                            <h4><strong class="card-header__title m-0">{{scale.name}}</strong></h4>
-                            <p class="text-muted">{{scale.description}}</p>
-                        </div>
-                        <div class="card-form__body">
-
-
-                            <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
-
-                                <table class="table mb-0 thead-border-top-0">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:5px"></th>
-                                            <th>বিবৃতিসমূহ</th>
-                                            {% for i in answer %}
-                                                <th style="width: 24px; text-align: center;">{{i.choice}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody class="list" id="">
-                                        {% for q in question %}
-                                        <tr>
-                                            <td>{{ q.serial }}</td>
-                                            <td>{{ q.question }}</td>
-                                            {% for i in answer %}
-                                            <td style="text-align: center;"><input type="radio" name="{{ q.id }}" id="{{ i.value }} required "></td>
-                                            {% endfor %}
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            <div class="form-group text-center mb-3">
-                                <button type="submit" class="btn btn-lg btn-block btn-success" data-toggle="modal" data-target="#modal-success"><b>Submit</b></button>
-                            </div>
-                            </div>
-                        </div>
-                </div>
+            <div class="table-responsive border-bottom">
+                <form class="radio-button-form" method="">
+                    {%  csrf_token %}
+                    <table class="table mb-0 thead-border-top-0">
+                        <thead>
+                        <tr>
+                            <th style="width:5px"></th>
+                            <th>বিবৃতিসমূহ</th>
+                            {% for i in answer %}
+                                <th style="width: 24px; text-align: center;">{{i.choice}}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody class="list" id="">
+                        {% for q in question %}
+                            <tr class="questionCount">
+                                <td>{{ q.serial }}</td>
+                                <td>{{ q.question }}</td>
+                                {% for i in answer %}
+                                    <td style="text-align: center;"><input type="radio" class ="check" name="{{ q.id }}" id="{{ i.value }}" value="{{ i.value }}" required="required"></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="form-group text-center mb-3">
+                        <button class="btn btn-lg btn-block btn-success" type="submit" name="resultButton" id = "totalSum">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 {%  if request.user.is_authenticated  %}
@@ -56,20 +56,54 @@
     {% block usersrole2 %}Administrator{% endblock %}
     {% block todoblock %}{% endblock %}
 {% endif %}
+
 {% block modal %}
-<!-- Success Alert Modal -->
-    <div id="modal-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Success Alert Modal -->
+    <div id="modal-success" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content bg-success">
                 <div class="modal-body text-center p-4">
                     <i class="material-icons icon-40pt text-white mb-2">check</i>
                     <h4 class="text-white">Well Done!</h4>
-                    <h3 class="text-white mt-3">Your score is: </h3>
-                    <h3 class="text-yellow mt-3">Suggestion: </h3>
+                    <h3 id="score" class="text-white mt-3">Score</h3>
+                    <h2 id='level' class="text-warning mt-3">Result</h2>
                     <button type="button" class="btn btn-light my-2" data-dismiss="modal">Continue</button>
                 </div> <!-- // END .modal-body -->
             </div> <!-- // END .modal-content -->
         </div> <!-- // END .modal-dialog -->
     </div> <!-- // END .modal -->
 {% endblock %}
-{% block javascript %}{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(".radio-button-form").submit(function(e){
+            let chk = document.querySelectorAll(".check:checked");
+            let allRadioButton = document.querySelectorAll(".questionCount");
+            let total = 0;
+            let result = "OK";
+            if(chk.length !== allRadioButton.length){
+                return false;
+            }
+            else{
+                chk.forEach(function(el){
+                    total += parseInt(el.getAttribute('value'));
+                });
+
+                {% for s in score %}
+                    if (total<={{ s.to_value }} && total>={{ s.from_value }}){
+                        result ="{{ s.result }}";
+                    }
+                {% endfor %}
+                document.getElementById("score").innerHTML = "Score: "+total;
+                document.getElementById("level").innerHTML = "Depression Level: "+result;
+                $("#modal-success").modal();
+                //Prevent page redirect
+                e.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}
+
+
+
+
