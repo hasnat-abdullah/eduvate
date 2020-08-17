@@ -32,10 +32,11 @@ class CourseLevel(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=250, null=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     short_description = RichTextUploadingField()
     long_description = RichTextUploadingField()
     featured_image = models.ImageField(default='default', upload_to='image/courseImage', blank=True)
-    featured_video = models.URLField(max_length = 200)
+    featured_video = models.CharField(max_length = 400)
     course_lang = models.ForeignKey(Language, on_delete=models.PROTECT)
     requirement = models.CharField(max_length=500)
     pre_requisite = models.CharField(max_length=500)
@@ -45,10 +46,9 @@ class Course(models.Model):
     course_Lectures = models.IntegerField()
 
     total_student_enrolled = models.PositiveIntegerField()
-    instructor = models.ManyToManyField(Instructor)
     is_active = models.BooleanField(default=True)
 
-    price = models.DecimalField(max_digits=8, decimal_places = 2)
+    price = models.IntegerField()
 
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
@@ -59,11 +59,9 @@ class Course(models.Model):
 
 
 class CourseInstructor(models.Model):
-    course_id= models.ManyToManyField(Course)
-    instructor_id= models.ManyToManyField(Instructor)
+    course_id= models.ForeignKey(Course, on_delete=models.CASCADE, default=1)
+    instructor_id= models.ForeignKey(Instructor,on_delete=models.CASCADE, default=1)
 
-    def __str__(self):
-        return self.course_id.name + " - " + self.instructor_id.name
 
 
 class LearningPath(models.Model):
@@ -91,7 +89,7 @@ class PathCourse(models.Model):
 
 
 class CourseModule(models.Model):
-    course = models.ManyToManyField(Course)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     module_position = models.SmallIntegerField(null=False)
     name = models.CharField(max_length=250, null=False)
     how_many_time_weekly_accessable = models.PositiveSmallIntegerField(null=False,default=1)

@@ -49,9 +49,9 @@ ENROLMENT_STATUS_CHOICES = (
 
 
 class EnrolledCourse(models.Model):
-    student_id = models.ManyToManyField(Student)
-    course_id = models.ManyToManyField(Course)
-    enrolment_status = models.CharField(max_length=10, choices=ENROLMENT_STATUS_CHOICES, default='bkash')
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+    enrolment_status = models.CharField(max_length=10, choices=ENROLMENT_STATUS_CHOICES, default='ongoing')
     enrolled_on = models.DateField(auto_now=False, auto_now_add=True)
 
     def __str__(self):
@@ -59,14 +59,14 @@ class EnrolledCourse(models.Model):
 
 
 class EnrolledModule(models.Model):
-    enrolled_id = models.ManyToManyField(EnrolledCourse)
-    module_id = models.ManyToManyField(CourseModule)
+    enrolled_id = models.ForeignKey(EnrolledCourse, on_delete=models.CASCADE)
+    module_id = models.ForeignKey(CourseModule,models.CASCADE)
     payment_status= models.ForeignKey(Payment, on_delete=models.PROTECT)
     enrolled_module_on = models.DateField(auto_now=False, auto_now_add=True)
     last_visited_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.module_id.name + " - " + self.enrolled_id.name
+        return self.module_id.name + " - " + self.enrolled_id.course_id.name
 
 
 class ScoreManager(models.Manager):

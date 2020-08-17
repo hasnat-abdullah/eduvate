@@ -16,7 +16,7 @@
 
                     <div class="container-fluid page__heading-container">
                         <div class="page__heading d-flex align-items-center justify-content-between">
-                            <h1 class="m-0">Courses</h1>
+                            <h1 class="m-0">Running Courses</h1>
                         </div>
                     </div>
 
@@ -31,15 +31,7 @@
                                 </div>
 
                                 <div class="form-inline  mb-3 ml-auto">
-                                    <div class="form-group mr-3">
-                                        <label for="custom-select" class="form-label mr-1">Category</label>
-                                        <select id="custom-select" class="form-control custom-select" style="width: 200px;">
-                                            <option selected>All categories</option>
-                                            <option value="1">Vue.js</option>
-                                            <option value="2">Node.js</option>
-                                            <option value="3">GitHub</option>
-                                        </select>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="published01" class="form-label mr-1">Status</label>
                                         <select id="published01" class="form-control custom-select" style="width: 200px;">
@@ -56,11 +48,11 @@
                             {% for c in course %}
                                 <div class="col-md-3">
                                     <div class="card card__course" data-aos="fade-up" data-offset="-100">
-                                        <img class="card-img-top" src="{{ c.featured_image.url }}" alt="Card image cap">
+                                        <img class="card-img-top" src="{{ c.course_id.featured_image.url }}" alt="Card image cap">
 
                                         <a class="card-header__title  justify-content-center align-left d-flex flex-column m-2" href="#">
 
-                                            <span class="course__subtitle">{{c.name}}</span>
+                                            <span class="course__subtitle">{{c.course_id.name}}</span>
                                         </a>
                                         <div class="p-0">
                                             <div class="mb-2">
@@ -74,7 +66,7 @@
                                                 <strong>4.7</strong>
                                             </div>
                                             <div class="d-flex align-items-center p-2">
-                                                <strong class="h4 m-0">৳{{ c.price }}</strong>
+                                                <strong class="h4 m-0">৳{{ c.course_id.price }}</strong>
                                                 <a href="{% url 'singleCourse' id=c.id %}" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i>Details</a>
                                             </div>
                                         </div>

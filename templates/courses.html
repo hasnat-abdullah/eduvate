@@ -43,18 +43,17 @@
                 </form>
 
                 <div class="row">
+                    {% for c in course %}
+                        <div class="col-md-3">
+                            <div class="card card__course" data-aos="fade-up" data-offset="-100">
+                                <img class="card-img-top" src="{{ c.featured_image.url }}" alt="Card image cap">
 
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="{% static 'assets/images/logos/react.svg' %}" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">React</span>
-                                    <span class="course__subtitle">Learn the Basics</span>
+                                <a class="card-header__title  justify-content-center align-left d-flex flex-column m-2" href="#">
+
+                                    <span class="course__subtitle">{{c.name}}</span>
                                 </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
+                                <div class="p-0">
+                                    <div class="mb-2">
                                     <span class="mr-2">
                                         <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
                                         <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
@@ -62,191 +61,16 @@
                                         <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
                                         <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
                                     </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="{% static 'assets/images/logos/vuejs.svg' %}" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Vue.js</span>
-                                    <span class="course__subtitle">Quick Tips</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
+                                        <strong>4.7</strong>
+                                    </div>
+                                    <div class="d-flex align-items-center p-2">
+                                        <strong class="h4 m-0">৳{{ c.price }}</strong>
+                                        <a href="{% url 'singleCourse' id=c.id %}" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i>Details</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="{% static 'assets/images/logos/angular.svg' %}" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Angular</span>
-                                    <span class="course__subtitle">Back to Basics</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="assets/images/logos/javascript.svg" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Javascript</span>
-                                    <span class="course__subtitle">ES6 and Beyond</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="assets/images/logos/node.svg" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Node</span>
-                                    <span class="course__subtitle">ES6 and Beyond</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="assets/images/logos/gitlab.png" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Gitlab</span>
-                                    <span class="course__subtitle">Git Workflows</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card card__course">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="fixed-student-course.html">
-                                    <span><img src="assets/images/logos/angular.svg" class="mb-1" style="width:34px;" alt="logo"></span>
-                                    <span class="course__title">Angular</span>
-                                    <span class="course__subtitle">Typescript and Beyond</span>
-                                </a>
-                            </div>
-                            <div class="p-3">
-                                <div class="mb-2">
-                                    <span class="mr-2">
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                        <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                    </span>
-                                    <strong>4.7</strong><br />
-                                    <small class="text-muted">(391 ratings)</small>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">$49</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                 </div>
                 <hr>
                 <div class="d-flex flex-row align-items-center mb-3">

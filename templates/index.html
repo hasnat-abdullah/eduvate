@@ -22,16 +22,16 @@
             <div id="course_list" class="container page__container">
                 <h2 class="bold m-4 text-center p-4">Recent Courses</h2>
                 <div class="row">
-
+                {% for c in course %}
                     <div class="col-md-3">
                         <div class="card card__course" data-aos="fade-up" data-offset="-100">
-                            <div class="card-header card-header-large card-header-dark bg-dark d-flex justify-content-center">
-                                <a class="card-header__title  justify-content-center align-self-center d-flex flex-column" href="#">
-                                    
-                                    <span class="course__subtitle">Relaxation</span>
+                            <img class="card-img-top" src="{{ c.featured_image.url }}" alt="Card image cap">
+
+                            <a class="card-header__title  justify-content-center align-left d-flex flex-column m-2" href="#">
+
+                                    <span class="course__subtitle">{{c.name}}</span>
                                 </a>
-                            </div>
-                            <div class="p-3">
+                            <div class="p-0">
                                 <div class="mb-2">
                                     <span class="mr-2">
                                         <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
@@ -42,13 +42,14 @@
                                     </span>
                                     <strong>4.7</strong>
                                 </div>
-                                <div class="d-flex align-items-center">
-                                    <strong class="h4 m-0">৳200</strong>
-                                    <a href="#" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i> Check Up</a>
+                                <div class="d-flex align-items-center p-2">
+                                    <strong class="h4 m-0">৳{{ c.price }}</strong>
+                                    <a href="{% url 'singleCourse' id=c.id %}" class="btn btn-primary ml-auto"><i class="material-icons">add_shopping_cart</i>Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                {% endfor %}
                 </div>
 
                 <div class="m-4 p-4">

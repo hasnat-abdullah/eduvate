@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from eduvate import settings
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Country(models.Model):
@@ -14,11 +15,11 @@ class Country(models.Model):
 
 class Instructor(models.Model):
     name = models.OneToOneField(User, on_delete=models.CASCADE)
-    details = models.TextField(max_length=250)
+    details = RichTextUploadingField()
     city = models.TextField(max_length=50)
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
     image = models.ImageField(default='default', upload_to='image/pro_pics', blank=True)
-
+    fb_url = models.URLField()
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
@@ -43,4 +44,4 @@ class InstructorRating (models.Model):
     rating_total_value = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.instructor_id.name.username + "-"+self.rating_count
+        return self.instructor_id.name.username + "-"+str(self.rating_count)

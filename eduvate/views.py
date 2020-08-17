@@ -1,21 +1,43 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from studentApp.models import Student,MeasuringScaleForModuleResult
+from studentApp.models import Student,MeasuringScaleForModuleResult,EnrolledCourse,EnrolledModule
 from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails,ScoringDetails
+from  courseApp.models import Course,CourseModule,CourseInstructor,Instructor
 from django.http import HttpResponseRedirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 def getIndex(request):
-
-    return render(request, 'index.html')
+    course = Course.objects.all().order_by('-updated_on')
+    context = {
+        'course':course,
+    }
+    return render(request, 'index.html',context)
 
 
 def getDashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'lms/student-dashboard.html')
+    return render(request, 'lms/student-dashboard.html', {'dashboard_active':'active'})
+
+def getSingleCourse(request,id):
+    course = get_object_or_404(Course,id=id)
+    instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
+    module = CourseModule.objects.filter(course=course.id)
+    totalModule = len(module)
+    relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
+    context = {
+        'course': course,
+        'instructor':instructor,
+        'module':module,
+        'totalModule':totalModule,
+        'relatedCourse':relatedCourse,
+        'all_course_active':'active'
+    }
+    if request.user.is_authenticated:
+        return render(request, 'lms/student-course.html',context)
+    return render(request, 'course-single.html',context)
 
 
 def getSaveScore(request,scaleId):
@@ -43,6 +65,7 @@ def getScale(request, scaleId):
         'question': question,
         'answer': answer,
         'score':score,
+        'test_active':'active'
     }
     if request.user.is_authenticated:
         return render(request, 'scale.html',context)
@@ -129,7 +152,26 @@ def getLogout(request):
     logout(request)
     return redirect('index')
 
+
 def getCourse(request):
+    course = Course.objects.all().order_by('-updated_on')
+    context = {
+        'course': course,
+        'all_course_active':'active'
+    }
+    if not request.user.is_authenticated:
+        return render(request, 'lms/student-courses.html', context)
+    return render(request, 'courses.html', context)
+
+
+def getRunningCourse(request):
+    if request.user.is_authenticated:
+        course = EnrolledCourse.objects.filter(student_id=request.user.id).order_by('-enrolled_on').select_related('course_id')
+        context = {
+            'course': course,
+            'running_course_active':'active'
+        }
+        return render(request, 'lms/student-running-courses.html', context)
     return render(request, 'courses.html')
 
 
