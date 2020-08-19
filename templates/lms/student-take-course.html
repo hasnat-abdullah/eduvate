@@ -1,6 +1,6 @@
 {% extends 'lms/base_student.html' %}
 {% load static %}
-{% block title %}Course {% endblock %}
+{% block title %}{{course.name}} {% endblock %}
 {% block stylesheet %}{% endblock %}
 {% block notifications %}{% endblock %}
 {% block usersname_top %}Hasnat Abdullah{% endblock %}
@@ -12,195 +12,106 @@
             <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
                 <div class="mdk-drawer-layout__content page">
 
-
-
-
-                    <div class="container-fluid page__container mt-4 mb-4">
-                        <div class="row" style="height: 400px;">
-                            <div class="col-md-4" data-perfect-scrollbar>
-                                <div class="card clear-shadow border">
-                                    <div class="card-body ">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <strong>Getting Started with Vision</strong>
-                                            <small class="text-muted">3h 50min</small>
-                                        </div>
-                                        <div>
-                                            <span class="mr-2">
-                                                <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                                <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                                <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                                <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star</i></a>
-                                                <a href="#" class="rating-link active"><i class="material-icons icon-16pt">star_half</i></a>
-                                            </span>
-                                            <small class="text-muted">(391 ratings)</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <ul class="list-group list-group-fit">
-
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">1.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Overview</a>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">3:33</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item active">
-                                        <div class="media">
-                                            <div class="media-left mr-1">2.</div>
-                                            <div class="media-body">
-                                                <a class="text-white" href="#">Asset Pipeline</a>
-                                            </div>
-                                            <div class="media-right">
-                                                <small>18:43</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">3.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Getting Started</a>
-                                                <small class="badge badge-soft-success ">FREE</small>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">5:21</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">4.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Advanced Workflows</a>
-                                                <small class="badge badge-soft-warning ">PRO</small>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">5:24</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">5.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Tips & Tricks</a>
-                                                <small class="badge badge-soft-warning ">PRO</small>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">11:38</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">6.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Layout Structure</a>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">4:23</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <div class="text-muted">7.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Conclusion</a>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="text-muted">1:50</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted">8.</div>
-                                            </div>
-                                            <div class="media-body">
-                                                <a href="#">Final Quiz</a>
-                                            </div>
-                                            <div class="media-right">
-                                                <small class="badge badge-soft-primary ">QUIZ</small>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-
+                    <div class="container-fluid page__heading-container">
+                        <div class="page__heading d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-between text-center text-lg-left mb-2 pb-2">
+                            <div>
+                                <h4 class="m-lg-0 text-muted">{{course.name}}</h4>
                             </div>
-                            <div class="col-md-8">
-
-                                <div class="embed-responsive embed-responsive-16by9 mb-4" style="max-height:400px; background: #000;">
-                                    <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/97243285?title=0&amp;byline=0&amp;portrait=0" allowfullscreen=""></iframe>
-                                </div>
-
+                            <div class="text-muted">
+                                <small>Updated on: {{lesson.updated_on}}</small>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="container-fluid page__container">
                         <div class="row">
                             <div class="col-md-8">
-
-                                <div class="card">
-                                    <div class="card-header card-header-tabs-basic nav border-top" role="tablist">
-                                        <a href="#overview" class="active" data-toggle="tab" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
-                                        <a href="#comments" data-toggle="tab" role="tab" aria-selected="false">Comments</a>
-                                        <a href="#assets" data-toggle="tab" role="tab" aria-selected="false">Assets</a>
+                                {% if lesson.video %}
+                                    <div class="card">
+                                    <div style="line-height: 1.7rem;" class="embed-responsive embed-responsive-16by9">
+                                        {{ lesson.video|safe }}
                                     </div>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="overview">
-                                            <div class="card-body" id="course_content">
-                                                <p>This course is aimed to get you started using the InVision app. Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur reprehenderit sint accusantium nisi dolorem at odio beatae, similique eaque soluta? This course is aimed to get you started using the InVision app. Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-
-                                                <h4>What you will learn</h4>
-                                                <ul>
-                                                    <li class="chevron">How to design a new Website</li>
-                                                    <li class="chevron">Keep track of your time</li>
-                                                    <li class="chevron">Skills you need</li>
-                                                    <li class="chevron">Sketch /Figma Interface</li>
-                                                    <li class="chevron">Spec a list of Requirements</li>
-                                                </ul>
-
-                                                <h4>Features</h4>
-                                                <ul>
-                                                    <li class="confirm">How to design a new Website</li>
-                                                    <li class="confirm">Keep track of your time</li>
-                                                    <li class="confirm">Skills you need</li>
-                                                    <li class="confirm">Sketch /Figma Interface</li>
-                                                    <li class="confirm">Spec a list of Requirements</li>
-                                                </ul>
-                                            </div>
+                                </div>
+                                {% endif %}
+                                <div class="card">
+                                    <div class="card-header card-header-tabs-basic nav border-top">
+                                        <div class="flex">
+                                            <h4 class="m-lg-1">{{module.name}}: {{ lesson.title }}</h4>
                                         </div>
-
-                                        <div class="tab-pane" id="comments">
-                                            //comments
+                                    </div>
+                                    <div class="card-body">
+                                        {{ lesson.description|safe }}
+                                    </div>
+                                    <div class="card-header py-0 border-top">
+                                        <div class="text-right">
+                                            {% if next_Lesson_id %}
+                                                <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id  %}" class="m-lg-1 text-white btn btn-primary">
+                                                    Next Lesson<i class="material-icons mr-1">navigate_next</i>
+                                                </a>
+                                            {% else %}
+                                                <a href="{%  url 'dashboard'  %}" class="m-lg-1 btn btn-success">
+                                                    Course Complete <i class="material-icons mr-1 ">check_circle</i>
+                                                </a>
+                                            {% endif %}
                                         </div>
-                                        <div class="tab-pane" id="assets">
-                                            //assets
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" data-perfect-scrollbar>
+                                <ul class="list-group list-group-fit">
+                                    <li class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-left mr-1">
+                                                <div class="text-muted"> </div>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4>{{module.name}}: Lesson List</h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% for l in lesson_list %}
+                                            {% url 'takeCourse' cid=course.id sid=module.id lid=l.id as this_url %}
+                                            {% if request.path == this_url %}
+                                                <li class="list-group-item active">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <div class="media-left">{{ forloop.counter }}.</div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <a class="text-white" href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{l.title}}</a>
+                                                        </div>
+                                                        <div class="media-right">
+                                                            {% if request.path != this_url %}
+                                                                <i class="material-icons icon-16pt text-muted">check_circle</i>
+                                                            {% else %}
+                                                                <i class="material-icons icon-16pt text-success">check_circle</i>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li class="list-group-item">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <div class="text-muted">{{ forloop.counter }}.</div>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <a href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{l.title}}</a>
+                                                        </div>
+                                                        <div class="media-right">
+                                                            {% if request.path != this_url %}
+                                                                <i class="material-icons icon-16pt text-muted">check_circle</i>
+                                                            {% else %}
+                                                                <i class="material-icons icon-16pt text-success">check_circle</i>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                </ul>
+
                                 <div class="card">
                                     <div class="card-header card-header-large bg-light d-flex align-items-center">
                                         <div class="flex">
@@ -208,15 +119,15 @@
                                             <div class="card-subtitle text-muted">Current lesson progress</div>
                                         </div>
                                         <div class="ml-auto">
-                                            <a href="#" class="btn btn-light text-muted"><i class="material-icons icon-16pt">check_circle</i> Complete</a>
+                                            <a href="#" class="btn {% if percentage_complete == 100 %} btn-success {% else %} btn-light text-muted {% endif %}"><i class="material-icons icon-16pt">check_circle</i> Complete</a>
                                         </div>
                                     </div>
                                     <div class="p-2 px-4 d-flex align-items-center">
                                         <div class="progress" style="width:100%;height:6px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{percentage_complete}}%;" aria-valuenow="{{percentage_complete}}" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                         <div class="ml-2 text-primary">
-                                            35%
+                                            {{percentage_complete}}
                                         </div>
                                     </div>
                                 </div>

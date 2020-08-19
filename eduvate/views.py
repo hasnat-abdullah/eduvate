@@ -38,6 +38,60 @@ def getSingleCourse(request,id):
     return render(request, 'course-single.html',context)
 
 
+def gettakeCourse(request,cid,sid,lid):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    course = get_object_or_404(Course, id=cid)
+    current_student = get_object_or_404(Student,name=request.user.id)
+
+    if not EnrolledCourse.objects.filter(student_id=current_student.name.id, course_id=course.id).exists():
+        return redirect('singleCourse', cid)
+
+    module = get_object_or_404(CourseModule,id=sid)
+    lesson = get_object_or_404(Lesson,id=lid)
+    lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')
+    total_lesson = Lesson.objects.filter(module_id__course__id=course.id).count()
+    total_completed_lesson = completedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id__course__id=course.id).count()
+    percentage_complete = int((total_completed_lesson*100)/total_lesson)
+
+    ######-----Mark as complete this lesson------####
+    obj, created = completedLesson.objects.update_or_create(student_id=current_student, lesson_id=lesson)
+
+
+    ######-----Next button url----########
+    next_Lesson_id=''
+    next_module_id=module.id
+    for l in lesson_list:
+        if l.lesson_position>lesson.lesson_position:
+            next_Lesson_id=l.id
+            break
+    if not next_Lesson_id:
+        next_module= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position)[:1]
+        for m in next_module:
+            next_module_id=m.id
+            break
+        if next_module_id !=module.id:
+            next_lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')[:1]
+            for l in next_lesson_list:
+                next_Lesson_id = l.id
+
+    relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
+
+    context = {
+        'course': course,
+        'module':module,
+        'lesson':lesson,
+        'lesson_list':lesson_list,
+        'relatedCourse':relatedCourse,
+        'next_Lesson_id':next_Lesson_id,
+        'next_module_id':next_module_id,
+        'percentage_complete':percentage_complete,
+        'running_course_active':'active'
+    }
+    return render(request, 'lms/student-take-course.html',context)
+
+
 def getSaveScore(request,scaleId):
     if request.user.is_authenticated:
         user= request.user.username

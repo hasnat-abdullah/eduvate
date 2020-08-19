@@ -30,6 +30,7 @@ urlpatterns = [
     path('course', views.getCourse, name='course'),
     path('running-course', views.getRunningCourse, name='runningCourse'),
     path('course/<int:id>/', views.getSingleCourse, name='singleCourse'),
+    path('course/<int:cid>/<int:sid>/<int:lid>', views.gettakeCourse, name='takeCourse'),
     path('scales/', views.getScaleList, name='scaleList'),
     path('scale/<int:scaleId>/', views.getScale, name='scale'),
     path('save_score/<int:scaleId>/', views.getSaveScore, name='saveScore'),

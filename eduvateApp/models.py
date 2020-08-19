@@ -138,11 +138,10 @@ class Course(models.Model):
     requirement = models.CharField(max_length=500)
     pre_requisite = models.CharField(max_length=500)
     level = models.ForeignKey(CourseLevel, on_delete=models.PROTECT)
-    what_u_will_learn = RichTextField
-    course_hours = models.CharField(max_length=20)
+    what_u_will_learn = RichTextField(null=True)
     course_Lectures = models.IntegerField()
 
-    total_student_enrolled = models.PositiveIntegerField()
+    total_student_enrolled = models.PositiveIntegerField( default=1)
     is_active = models.BooleanField(default=True)
 
     price = models.IntegerField()
@@ -202,11 +201,11 @@ LESSON_CHOICE= (
     )
 
 class Lesson(models.Model):
-    module_id = models.ManyToManyField(CourseModule)
+    module_id = models.ForeignKey(CourseModule, on_delete=models.CASCADE, default=1)
     lesson_type = models.CharField(max_length=8, choices=LESSON_CHOICE, default='content')
     lesson_position = models.SmallIntegerField(null=False)
     title = models.CharField(max_length=250, null=False)
-    video = models.URLField(max_length=300)
+    video = models.CharField(null=True, blank=True, max_length=350)
     description = RichTextUploadingField()
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
@@ -216,7 +215,7 @@ class Lesson(models.Model):
 
 
 class MeasuringScaleForModule(models.Model):
-    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE)
+    module_id = models.ForeignKey(CourseModule,on_delete=models.CASCADE, default=1)
     scale_name = models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
@@ -392,7 +391,6 @@ class StudentWorkHistory(models.Model):
 ENROLMENT_STATUS_CHOICES = (
         ('completed', 'COMPLETED'),
         ('partial', 'PARTIAL'),
-        ('ongoing', 'ONGOING'),
         ('notStarted', 'NOTSTARTED')
     )
 
@@ -400,7 +398,7 @@ ENROLMENT_STATUS_CHOICES = (
 class EnrolledCourse(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-    enrolment_status = models.CharField(max_length=10, choices=ENROLMENT_STATUS_CHOICES, default='ongoing')
+    enrolment_status = models.CharField(max_length=11, choices=ENROLMENT_STATUS_CHOICES, default='notStarted')
     enrolled_on = models.DateField(auto_now=False, auto_now_add=True)
 
     def __str__(self):
@@ -409,13 +407,22 @@ class EnrolledCourse(models.Model):
 
 class EnrolledModule(models.Model):
     enrolled_id = models.ForeignKey(EnrolledCourse, on_delete=models.CASCADE)
-    module_id = models.ForeignKey(CourseModule,models.CASCADE, null=True)
+    module_id = models.ForeignKey(CourseModule,models.CASCADE, default=1)
     payment_status= models.ForeignKey(Payment, on_delete=models.PROTECT, null=True)
     enrolled_module_on = models.DateField(auto_now=False, auto_now_add=True)
     last_visited_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return self.module_id.name + " - " + self.enrolled_id.course_id.name
+
+
+class completedLesson(models.Model):
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    lesson_id = models.ForeignKey(Lesson, on_delete=models.PROTECT, null=True)
+    complete_lesson_on = models.DateField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateField(auto_now=True, auto_now_add=False)
+    def __str__(self):
+        return  self.student_id.name.username + " : " + self.lesson_id.module_id.name+ " : " + self.lesson_id.title
 
 
 class ScoreManager(models.Manager):

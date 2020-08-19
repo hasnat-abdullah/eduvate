@@ -30,4 +30,5 @@ admin.site.register(Student)
 admin.site.register(EnrolledCourse)
 admin.site.register(EnrolledModule)
 admin.site.register(StudentWorkHistory)
+admin.site.register(completedLesson)
 
