@@ -30,16 +30,10 @@ urlpatterns = [
     path('course', views.getCourse, name='course'),
     path('running-course', views.getRunningCourse, name='runningCourse'),
     path('course/<int:id>/', views.getSingleCourse, name='singleCourse'),
+    path('scales/', views.getScaleList, name='scaleList'),
     path('scale/<int:scaleId>/', views.getScale, name='scale'),
     path('save_score/<int:scaleId>/', views.getSaveScore, name='saveScore'),
     path('payment', views.getPayment, name='payment'),
-    path('student/', include('studentApp.urls')),
-    path('course/', include('courseApp.urls')),
-    path('appointment/', include('appointmentApp.urls')),
-    path('exam/', include('examApp.urls')),
-    path('instructor/', include('instructorApp.urls')),
-    path('payment/', include('paymentApp.urls')),
-    path('blog/', include('blogApp.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 if settings.DEBUG:

@@ -1,0 +1,45 @@
+{% extends 'base_guest.html' %}
+{% load static %}
+{% block title %}Courses {% endblock %}
+{% block stylesheet %}{% endblock %}
+{% block content %}
+
+            <div class="container page__heading-container">
+                <div class="page__heading d-flex align-items-center justify-content-between">
+                    <h1 class="m-0"></h1>
+                </div>
+            </div>
+
+            <div class="container page__heading-container">
+                <div class="page__heading d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-between text-center text-lg-left">
+                    <div>
+                        <h1 class="m-lg-0">Scales</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container page__container">
+                <div class="row">
+                    {% for s in scale %}
+                        <div class="col-md-3">
+                        <div class="card card__course card__course__animate">
+
+                            <div class="p-3 text-center border-bottom">
+                                <div class="bold my-3">
+                                    <a href="{% url 'scale' scaleId=s.id %}" class="text-body">
+                                        <h5 class="card-title">{{ s.name }}</h5>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="form-group my-2 text-center">
+                                <a class="btn btn-primary " href="{% url 'scale' scaleId=s.id %}" role="button">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+{% endblock %}
+{% block javascript %}{% endblock %}

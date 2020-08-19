@@ -1,8 +1,6 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from studentApp.models import Student,MeasuringScaleForModuleResult,EnrolledCourse,EnrolledModule
-from scaleApp.models import MeasuringScale, QuestionDetails, AnswerDetails,ScoringDetails
-from  courseApp.models import Course,CourseModule,CourseInstructor,Instructor
+from eduvateApp.models import *
 from django.http import HttpResponseRedirect
 from .forms import RegisterForm
 from django.contrib.auth import authenticate, login, logout
@@ -73,6 +71,18 @@ def getScale(request, scaleId):
         return render(request, 'scale_guest.html',context)
 
 
+def getScaleList(request):
+    scale = MeasuringScale.objects.all().order_by('name')
+    context = {
+        'scale': scale,
+        'test_active':'active'
+    }
+    if request.user.is_authenticated:
+        return render(request, 'lms/scale-list.html',context)
+    else:
+        return render(request, 'scale-list-guest.html',context)
+
+
 def getSignup(request):
     # if this is a POST request we need to process the form data
     template = 'sign-up.html'
@@ -118,12 +128,22 @@ def getSignup(request):
                 student = Student.objects.create_student(
                     request.user,
                     form.cleaned_data['age'],
-                    form.cleaned_data['city'],
-                    form.cleaned_data['country'],
+                    form.cleaned_data['gender'],
+                    form.cleaned_data['address'],
+                    form.cleaned_data['education'],
+                    form.cleaned_data['ocupation'],
+                    form.cleaned_data['religion'],
+                    form.cleaned_data['marial_status'],
+                    form.cleaned_data['socio_economic_status'],
+                    form.cleaned_data['mental_problem'],
+                    form.cleaned_data['mental_treatment_type'],
+                    form.cleaned_data['medicine_taken_duration'],
+                    form.cleaned_data['physical_problem'],
+                    form.cleaned_data['knowing_source'],
                 )
                 student.save()
                 # redirect to accounts page:
-                return redirect('index')
+                return redirect('dashboard')
     # No post data availabe, let's just show the page.
     else:
         form = RegisterForm()
@@ -155,11 +175,13 @@ def getLogout(request):
 
 def getCourse(request):
     course = Course.objects.all().order_by('-updated_on')
+    category = Category.objects.all().order_by('name')
     context = {
         'course': course,
-        'all_course_active':'active'
+        'all_course_active':'active',
+        'category':category
     }
-    if not request.user.is_authenticated:
+    if request.user.is_authenticated:
         return render(request, 'lms/student-courses.html', context)
     return render(request, 'courses.html', context)
 

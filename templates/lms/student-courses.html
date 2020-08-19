@@ -23,7 +23,7 @@
 
 
                     <div class="container-fluid page__container">
-                        <form action="#" class="">
+                        <form action="#" class="border-bottom">
                             <div class="d-lg-flex">
                                 <div class="search-form mb-3 mr-3-lg search-form--light">
                                     <input type="text" class="form-control" placeholder="Search courses" id="searchSample02">
@@ -35,9 +35,9 @@
                                         <label for="custom-select" class="form-label mr-1">Category</label>
                                         <select id="custom-select" class="form-control custom-select" style="width: 200px;">
                                             <option selected>All categories</option>
-                                            <option value="1">Vue.js</option>
-                                            <option value="2">Node.js</option>
-                                            <option value="3">GitHub</option>
+                                            {% for cat in category %}
+                                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -52,7 +52,7 @@
                             </div>
                         </form>
 
-                        <div class="row">
+                        <div class="row pt-3">
                             {% for c in course %}
                                 <div class="col-md-3">
                                     <div class="card card__course" data-aos="fade-up" data-offset="-100">

@@ -1,0 +1,52 @@
+{% extends 'lms/base_student.html' %}
+{% load static %}
+{% block title %}Courses {% endblock %}
+{% block stylesheet %}{% endblock %}
+{% block notifications %}{% endblock %}
+{% block usersname_top %}Hasnat Abdullah{% endblock %}
+{% block content %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+    <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
+    <div class="mdk-drawer-layout__content page">
+
+
+
+        <div class="container-fluid page__heading-container">
+            <div class="page__heading d-flex align-items-center justify-content-between">
+                <h1 class="m-0">Scales</h1>
+            </div>
+        </div>
+        <div class="container-fluid page__container">
+            <div class="row">
+                {% for s in scale %}
+                    <div class="col-md-3">
+                        <div class="card card__course card__course__animate">
+
+                            <div class="p-3 text-center border-bottom">
+                                <div class="bold my-3">
+                                    <a href="{% url 'scale' scaleId=s.id %}" class="text-body">
+                                        <h5 class="card-title">{{ s.name }}</h5>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="form-group my-2 text-center">
+                                <a class="btn btn-primary " href="{% url 'scale' scaleId=s.id %}" role="button">View</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block usersname %}Hasnat Abdullah{% endblock %}
+{% block usersrole %}Administrator{% endblock %}
+{% block usersname2 %}Hasnat Abdullah{% endblock %}
+{% block usersrole2 %}Administrator{% endblock %}
+{% block todoblock %}{% endblock %}
+{% block javascript %}{% endblock %}

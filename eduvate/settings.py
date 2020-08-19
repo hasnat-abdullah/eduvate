@@ -42,15 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'courseApp',
-    'studentApp',
-    'instructorApp',
-    'examApp',
+    'eduvateApp',
     'apis',
-    'blogApp',
-    'paymentApp',
-    'appointmentApp',
-    'scaleApp',
 
     #3rd party App
     'ckeditor',
@@ -108,7 +101,7 @@ WSGI_APPLICATION = 'eduvate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'eduvate',
+        'NAME': 'eduvate_db',
         'USER': 'postgres',
         'PASSWORD': '12345',
         'HOST': '127.0.0.1',

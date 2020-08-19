@@ -15,8 +15,9 @@
 {% block content %}
             <form action="{% url 'signup' %}" method="POST">
                 {% csrf_token %}
+                <!--Basic User regestration-->
                 <div class="form-group mb-3">
-                    <label class="text-label" for="{{ form.first_name.id_for_label }}">Full Name:</label>
+                    <label class="text-label" for="{{ form.first_name.id_for_label }}">নামঃ</label>
                     <div class="input-group input-group-merge">
                         {{ form.full_name }}
                         <div class="input-group-prepend">
@@ -26,29 +27,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="{{ form.age.id_for_label }}">Age</label>
-                        {{ form.age }}
-                    </div>
-                    <div class="col-12 col-md-6 mb-3">
-                        <label for="{{ form.city.id_for_label }}">City</label>
-                        {{ form.city }}
-                    </div>
-                </div>
                 <div class="form-group mb-3">
-                    <label for="{{ form.country.id_for_label }}">Country</label>
-                    <div class="input-group input-group-merge">
-                        {{ form.country }}
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <span class="material-icons mr-2">place</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mb-3">
-                    <label class="text-label" for="{{ form.username.id_for_label }}">Mobile Number:</label>
+                    <label class="text-label" for="{{ form.username.id_for_label }}">মোবাইল নম্বরঃ</label>
                     <div class="input-group input-group-merge">
                         {{ form.username }}
                         <div class="input-group-prepend">
@@ -69,10 +49,138 @@
                         </div>
                     </div>
                 </div>
+                <!--end basic user regestration-->
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.age.id_for_label }}">বয়সঃ</label>
+                        {{ form.age }}
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.gender.id_for_label }}">লিঙ্গঃ</label>
+                        <div class="input-group input-group-merge">
+                        {{ form.gender }}
+                    </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="text-label" for="{{ form.address.id_for_label }}">ঠিকানাঃ</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.address }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="material-icons mr-2">call</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.education.id_for_label }}">শিক্ষাগত যোগ্যতাঃ</label>
+                        {{ form.education }}
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.ocupation.id_for_label }}">পেশাঃ</label>
+                        <div class="input-group input-group-merge">
+                        {{ form.ocupation }}
+                    </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.marial_status.id_for_label }}">বৈবাহিক অবস্থাঃ</label>
+                        {{ form.marial_status }}
+                    </div>
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.religion.id_for_label }}">ধর্মঃ</label>
+                        <div class="input-group input-group-merge">
+                            {{ form.religion }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="text-label" for="{{ form.socio_economic_status.id_for_label }}">আর্থ-সামাজিক অবস্থাঃ(পারিবারিক মাসিক আয়)</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.socio_economic_status }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="material-icons mr-2">call</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="">অন্য কোন মানসিক সমস্যা আছে কি?</label>
+                        <label class="radio-inline"><input type="radio" name="is_mental_prblm" value="1" required="required"> Yes</label>
+                        <label class="radio-inline"><input type="radio" name="is_mental_prblm" value="0"> No</label>
+                    </div>
+                    <div id="id_which_prblm" style="display:none" class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.mental_problem.id_for_label }}">সেটা কি?</label>
+                        <div class="input-group input-group-merge">
+                        {{ form.mental_problem }}
+                    </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="">মানসিক সমস্যার জন্য কখনও চিকিৎসা নিয়েছেন?</label>
+                        <label class="radio-inline"><input type="radio" name="is_taking_treatment" value="3" required="required"> Yes</label>
+                        <label class="radio-inline"><input type="radio" name="is_taking_treatment" value="2"> No</label>
+                    </div>
+                    <div  id="id_which_treatment" style="display:none"  class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.mental_treatment_type.id_for_label }}">কোন ধরণের চিকিৎসা নিয়েছেন?</label>
+                        <div class="input-group input-group-merge">
+                            {{ form.mental_treatment_type }}
+                        </div>
+                    </div>
+                </div>
+
+                <div  id="id_medicine_duration" style="display:none" class="form-group mb-3">
+                    <label class="text-label" for="{{ form.medicine_taken_duration.id_for_label }}">কতদিন ধরে ঔষধ নিচ্ছেন?</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.medicine_taken_duration }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="material-icons mr-2">call</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="">বিশেষ কোন শারীরিক রোগ আছে কিনা?</label>
+                        <label class="radio-inline"><input type="radio" name="is_physical_prblm" value="5" required="required"> Yes</label>
+                        <label class="radio-inline"><input type="radio" name="is_physical_prblm" value="3"> No</label>
+                    </div>
+                    <div  id="id_physical_prblm" style="display:none" class="col-12 col-md-6 mb-3">
+                        <label class="text-label" for="{{ form.physical_problem.id_for_label }}">সেটা কি?</label>
+                        {{ form.physical_problem }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="text-label" for="{{ form.knowing_source.id_for_label }}">এই ওয়েবসাইট সম্পর্কে কিভাবে জানতে পেরেছেন?</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.knowing_source }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="material-icons mr-2">call</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!----------------End form--------------->
                 <div class="form-group mb-2 text-center">
                     <div class="custom-control custom-checkbox">
                         {{ form.check }}
-                        <!--<input type="checkbox" checked="" class="custom-control-input" id="terms" />-->
                         <label class="custom-control-label" for="{{ form.check.id_for_label }}">I accept <a href="#">Terms and Conditions</a></label>
                     </div>
                 </div>
@@ -84,4 +192,44 @@
                 </div>
             </form>
 {% endblock %}
-{% block javascript %} {% endblock %}
+{% block javascript %}
+    <script>
+        $(function() {
+            $('input[name="is_mental_prblm"]').on('click', function() {
+                if ($(this).val() == '1') {
+                    $('#id_which_prblm').show();
+                }
+                else {
+                    $('#id_which_prblm').hide();
+                }
+            });
+            $('input[name="is_taking_treatment"]').on('click', function() {
+                if ($(this).val() == '3') {
+                    $('#id_which_treatment').show();
+                }
+                else {
+                    $('#id_which_treatment').hide();
+                }
+            });
+            $('input[name="is_physical_prblm"]').on('click', function() {
+                if ($(this).val() == '5') {
+                    $('#id_physical_prblm').show();
+                }
+                else {
+                    $('#id_physical_prblm').hide();
+                }
+            });
+            $('select[name="mental_treatment_type"]').change(function () {
+                $('select[name="mental_treatment_type"] option:selected').each(function (){
+                    if ($(this).val() == 'medicine') {
+                        $('#id_medicine_duration').show();
+                    }
+                    else {
+                        $('#id_medicine_duration').hide();
+                    }
+                });
+            });
+        })
+    </script>
+
+{% endblock %}
