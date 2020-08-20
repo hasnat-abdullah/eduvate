@@ -17,7 +17,21 @@ def getIndex(request):
 def getDashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'lms/student-dashboard.html', {'dashboard_active':'active'})
+
+    course = EnrolledCourse.objects.filter(student_id=request.user.id).order_by('-enrolled_on').select_related('course_id')
+    resume_show_course=''
+    for c in course:
+        if c.enrolment_status != 'completed':
+            resume_show_course=c
+            break
+        else:resume_show_course=c
+
+    context={
+        'course': course,
+        'resume_show_course':resume_show_course,
+        'dashboard_active': 'active',
+    }
+    return render(request, 'lms/student-dashboard.html', context)
 
 
 def getEnrollCourse(request,id):
@@ -28,9 +42,6 @@ def getEnrollCourse(request,id):
         return redirect('signup')
 
     course = get_object_or_404(Course,id=id)
-
-    if EnrolledCourse.objects.filter(student_id=current_student.id,course_id=course.id).exists():
-        last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student.id,lesson_id__module_id__course__id=course.id).order_by('lesson_id__lesson_position')[:1]
 
     module_list = CourseModule.objects.filter(course=course.id).order_by('module_position')[:1]
     first_module=''
@@ -43,10 +54,12 @@ def getEnrollCourse(request,id):
     for l in lesson_list:
         first_lesson = l.id
 
-    ######-----Enroll to the Course------####
-    obj, created = EnrolledCourse.objects.update_or_create(student_id=current_student, course_id=course)
-    ######-----Enroll to the first module------####
-    obj, created = EnrolledModule.objects.update_or_create(student_id=current_student, module_id=first_module)
+    if not EnrolledCourse.objects.filter(student_id=current_student.id,course_id=course.id).exists():
+        ec = EnrolledCourse(student_id=current_student, course_id=course, percent_complited=0)
+        ec.save()
+        em = EnrolledModule(student_id=current_student, module_id=first_module)
+        em.save()
+        #last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student.id,lesson_id__module_id__course__id=course.id).order_by('lesson_id__lesson_position')[:1]
 
     return redirect('takeCourse',cid=course.id, sid=first_module.id, lid=first_lesson )
 
@@ -123,15 +136,26 @@ def gettakeCourse(request,cid,sid,lid):
     # ---if the student does not enrolled in this course---
     if not (lesson.lesson_position==1 or CompletedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id=module.id,lesson_id__lesson_position=lesson.lesson_position-1).exists()):
         return redirect('denied')
+
     module_list = CourseModule.objects.filter(course=course.id)
     lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')
     total_lesson = Lesson.objects.filter(module_id__course__id=course.id).count()
     total_completed_lesson = CompletedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id__course__id=course.id).count()
     percentage_complete = int((total_completed_lesson*100)/total_lesson)
 
+    enrolled_course.percent_complited=percentage_complete
+    enrolled_course.save()
     ######-----Mark as complete this lesson------####
     obj, created = CompletedLesson.objects.update_or_create(student_id=current_student, lesson_id=lesson)
-
+    scale=''
+    question=''
+    answer=''
+    score=''
+    if lesson.lesson_type == 'scale':
+        scale= LessonScale.objects.get(lesson_id=lesson.id)
+        question = QuestionDetails.objects.filter(scale_id=scale.scale_name.id).order_by('serial')
+        answer = AnswerDetails.objects.filter(scale_id=scale.scale_name.id).order_by('serial')
+        score = ScoringDetails.objects.filter(scale_id=scale.scale_name.id).order_by('-to_value')
 
     ######-----Next button url----########
     next_Lesson_id=''
@@ -159,7 +183,8 @@ def gettakeCourse(request,cid,sid,lid):
 
     ######-----Mark as complete this course if there is no lesson left------####
     if not next_Lesson_id:
-        obj, created = CompletedCourse.objects.update_or_create(student_id=current_student, course_id=course, )
+        enrolled_course.enrolment_status='completed'
+        enrolled_course.save()
 
     relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
 
@@ -167,6 +192,10 @@ def gettakeCourse(request,cid,sid,lid):
         'course': course,
         'module':module,
         'lesson':lesson,
+        'scale': scale,
+        'question': question,
+        'answer': answer,
+        'score': score,
         'lesson_list':lesson_list,
         'relatedCourse':relatedCourse,
         'next_Lesson_id':next_Lesson_id,

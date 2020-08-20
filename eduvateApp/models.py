@@ -193,7 +193,7 @@ class CourseModule(models.Model):
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.name
+        return self.course.name+": "+ self.name
 
 LESSON_CHOICE= (
         ('content', 'Content'),
@@ -206,12 +206,22 @@ class Lesson(models.Model):
     lesson_position = models.SmallIntegerField(null=False)
     title = models.CharField(max_length=250, null=False)
     video = models.CharField(null=True, blank=True, max_length=350)
-    description = RichTextUploadingField()
+    description = RichTextUploadingField(null=True)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return str(self.module_id.name) +": "+ self.title
+        return self.module_id.course.name +": "+ self.module_id.name +": "+ self.title
+
+
+class LessonScale(models.Model):
+    lesson_id = models.OneToOneField(Lesson,on_delete=models.CASCADE)
+    scale_name = models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
+    created_on = models.DateField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return self.lesson_id.module_id.course.name +": "+ self.lesson_id.module_id.name +": "+ self.lesson_id.title+ " - " + self.scale_name.name
 
 
 class MeasuringScaleForModule(models.Model):
@@ -399,7 +409,9 @@ class EnrolledCourse(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     enrolment_status = models.CharField(max_length=11, choices=ENROLMENT_STATUS_CHOICES, default='notStarted')
+    percent_complited = models.SmallIntegerField(null=True)
     enrolled_on = models.DateField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return self.course_id.name + " - " + self.student_id.name.username

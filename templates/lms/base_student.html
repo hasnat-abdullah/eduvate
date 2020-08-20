@@ -67,7 +67,7 @@
                         <ul class="nav navbar-nav d-none d-lg-flex pl-2">
                             <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
 							<li class="nav-item"><a href="{% url 'course' %}" class="nav-link">Courses</a></li>
-							<li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+							<li class="nav-item"><a href="{% url 'scaleList' %}" class="nav-link">Self test</a></li>
                         </ul>
 
                         <form class="search-form search-form--light d-none d-sm-flex flex ml-3" action="{% url 'index' %}">
@@ -77,41 +77,6 @@
 
 
                         <ul class="nav navbar-nav d-none d-md-flex">
-                            <li class="nav-item dropdown">
-                                <a href="#notifications_menu" class="nav-link dropdown-toggle" data-toggle="dropdown" data-caret="false">
-                                    <span class="nav-icon navbar-notifications-indicator">
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40" width="25" height="25">
-                                            <g transform="matrix(1.6666666666666667,0,0,1.6666666666666667,0,0)">
-                                                <path d="M21.5,12.254c0.003-5.247-4.248-9.502-9.494-9.506C6.759,2.745,2.503,6.996,2.5,12.243 c-0.002,2.915,1.335,5.669,3.625,7.471l-2.332,2.333c-0.39,0.39-0.39,1.024,0,1.414c0.394,0.383,1.02,0.383,1.414,0L7.863,20.8 c2.613,1.267,5.661,1.267,8.274,0l2.656,2.657c0.394,0.383,1.02,0.383,1.414,0c0.39-0.39,0.39-1.024,0-1.414l-2.332-2.333 C20.163,17.912,21.499,15.164,21.5,12.254z M11.25,5.754c0-0.414,0.336-0.75,0.75-0.75s0.75,0.336,0.75,0.75V11.5h2.75 c0.414,0,0.75,0.336,0.75,0.75S15.914,13,15.5,13H12c-0.414,0-0.75-0.336-0.75-0.75V5.754z M7.4,2.27 c0.251-0.115,0.361-0.412,0.246-0.663c-0.028-0.061-0.067-0.115-0.117-0.16C5.711-0.236,2.873-0.127,1.19,1.691 c-1.593,1.72-1.593,4.376,0,6.096C1.285,7.89,1.418,7.948,1.558,7.948c0.195-0.001,0.371-0.114,0.454-0.29 C3.11,5.278,5.02,3.368,7.4,2.27z M19.5,0.254c-1.125,0.003-2.207,0.429-3.033,1.193c-0.204,0.187-0.217,0.503-0.031,0.706 c0.045,0.049,0.099,0.089,0.16,0.117c2.38,1.098,4.29,3.008,5.388,5.388c0.085,0.174,0.26,0.286,0.454,0.29 c0.14,0,0.273-0.058,0.368-0.161c1.683-1.818,1.573-4.657-0.245-6.339C21.728,0.677,20.634,0.251,19.5,0.254z" stroke="none" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </g>
-                                        </svg>
-                                    </span>
-                                </a>
-                                <div id="notifications_menu" class="dropdown-menu dropdown-menu-right navbar-notifications-menu">
-                                    <div class="dropdown-item d-flex align-items-center py-2">
-                                        <span class="flex navbar-notifications-menu__title m-0">Notifications</span>
-                                        <a href="javascript:void(0)" class="text-muted"><small>Clear all</small></a>
-                                    </div>
-                                    <div class="navbar-notifications-menu__content" data-perfect-scrollbar>
-                                        <div class="py-2">
-                            {% block notifications %}{% endblock %}
-                                            <div class="dropdown-item d-flex">
-                                                <div class="mr-3">
-                                                    <div class="avatar avatar-xs">
-                                                        <img src="assets/images/256_daniel-gaffey-1060698-unsplash.jpg" alt="Avatar" class="avatar-img rounded-circle">
-                                                    </div>
-                                                </div>
-                                                <div class="flex">
-                                                    <a href="">A.Demian</a> left a comment on <a href="">Stack</a><br>
-                                                    <small class="text-muted">1 minute ago</small>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0);" class="dropdown-item text-center navbar-notifications-menu__footer">View All</a>
-                                </div>
-                            </li>
                             <li class="nav-item">
                                 <a href="#events-drawer" data-toggle="sidebar" class="nav-link d-flex align-items-center">
                                     <span class=" nav-icon">
@@ -126,39 +91,7 @@
 
                         </ul>
 
-                        <div class="dropdown">
-                            <a href="#account_menu" class="dropdown-toggle navbar-toggler navbar-toggler-dashboard border-left d-flex align-items-center ml-navbar" data-toggle="dropdown">
-                                <img src="{% static 'assets/images/frontted-logo-blue.svg' %}" class="rounded-circle" width="32" alt="Frontted">
-                                <span class="ml-1 d-flex-inline">
-                                    {% if user.is_authenticated %}
-                                        <span class="text-light">{{ user.get_full_name  }}</span>
-                                    {% endif %}
-                                </span>
-                            </a>
-                            <div id="company_menu" class="dropdown-menu dropdown-menu-right navbar-company-menu">
-                                <div class="dropdown-item d-flex align-items-center py-2 navbar-company-info py-3">
 
-                                    <span class="mr-3">
-                                        <img src="assets/images/frontted-logo-blue.svg" width="43" height="43" alt="avatar">
-                                    </span>
-                                    <span class="flex d-flex flex-column">
-                                        <strong class="h5 m-0">{{user.get_short_name}}</strong>
-                                        <small class="text-muted text-uppercase">{% block usersrole %}{% endblock %}</small>
-                                    </span>
-
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item d-flex align-items-center py-2" href="student-edit-account.html">
-                                    <span class="material-icons mr-2">account_circle</span> Edit Account
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center py-2" href="#">
-                                    <span class="material-icons mr-2">settings</span> Settings
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'logout' %}">
-                                    <span class="material-icons mr-2">exit_to_app</span> Logout
-                                </a>
-                            </div>
-                        </div>
 
                     </div>
                 </div>
@@ -189,7 +122,6 @@
                                     <div class="dropdown ml-auto">
                                         <a href="#" data-toggle="dropdown" data-caret="false" class="text-muted"><i class="material-icons">more_vert</i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
                                             <a class="dropdown-item" href="student-profile.html">My profile</a>
                                             <a class="dropdown-item" href="student-edit-account.html">Edit account</a>
                                             <div class="dropdown-divider"></div>
@@ -255,11 +187,11 @@
                                                     </g>
                                                 </svg>
                                             </span>
-                                            <span class="sidebar-menu-text">Test</span>
+                                            <span class="sidebar-menu-text">Self Test</span>
                                         </a>
                                     </li>
 
-
+                                    <!--
                                     <li class="sidebar-menu-item {{ billing_active }}">
                                         <a class="sidebar-menu-button" href="student-billing.html">
                                             <span class="sidebar-menu-icon sidebar-menu-icon--left">
@@ -271,35 +203,8 @@
                                             </span>
                                             <span class="sidebar-menu-text">Billing</span>
                                         </a>
-                                    </li>
+                                    </li> -->
 
-
-                                    <li class="sidebar-menu-item {{ edit_account_active }}">
-                                        <a class="sidebar-menu-button" href="student-edit-account.html">
-                                            <span class="sidebar-menu-icon sidebar-menu-icon--left">
-                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40" width="22" height="22">
-                                                    <g transform="matrix(1.6666666666666667,0,0,1.6666666666666667,0,0)">
-                                                        <path d="M16.1,13.071c0.085-0.085,0.097-0.218,0.03-0.317c-0.649-0.959-2.342-1.584-4.633-2.426l-0.628-0.23 c-0.076-0.088-0.124-0.196-0.138-0.311c-0.093-0.431-0.073-0.879,0.058-1.3c1.076-1.166,1.609-2.733,1.466-4.314 C12.257,1.756,10.677,0,8.5,0S4.745,1.756,4.745,4.174C4.603,5.747,5.131,7.308,6.2,8.471C6.343,8.895,6.368,9.35,6.272,9.787 c-0.015,0.114-0.061,0.221-0.134,0.309l-0.631,0.232c-2.448,0.9-4.215,1.55-4.754,2.626C0.269,14.074,0.013,15.28,0,16.5 C0,16.776,0.224,17,0.5,17h11.569c0.066,0,0.13-0.026,0.177-0.073L16.1,13.071z M15.086,22.74c0.044-0.172-0.006-0.354-0.131-0.479 l-2.215-2.215c-0.195-0.195-0.512-0.195-0.707,0c-0.06,0.06-0.104,0.134-0.127,0.216l-0.886,3.1 c-0.076,0.265,0.077,0.542,0.343,0.619C11.407,23.993,11.454,24,11.5,24c0.046,0,0.093-0.006,0.137-0.02l3.1-0.885 C14.908,23.047,15.041,22.912,15.086,22.74z M21.772,16.936c0.195-0.195,0.195-0.512,0-0.707l-3-3 c-0.195-0.195-0.512-0.195-0.707,0l-5.011,5.01c-0.195,0.195-0.195,0.512,0,0.707l3,3c0.195,0.195,0.512,0.195,0.707,0 L21.772,16.936z M19.48,11.813c-0.196,0.195-0.196,0.512-0.001,0.707c0,0,0.001,0.001,0.001,0.001l3,3 c0.105,0.088,0.24,0.132,0.377,0.124c0.142-0.009,0.276-0.069,0.377-0.17c1.022-1.024,1.022-2.683,0-3.707 C22.185,10.744,20.504,10.764,19.48,11.813z" stroke="none" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <span class="sidebar-menu-text">Edit Account</span>
-                                        </a>
-                                    </li>
-
-
-                                    <li class="sidebar-menu-item {{ profile_active }}">
-                                        <a class="sidebar-menu-button" href="student-profile.html">
-                                            <span class="sidebar-menu-icon sidebar-menu-icon--left">
-                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40" width="22" height="22">
-                                                    <g transform="matrix(1.6666666666666667,0,0,1.6666666666666667,0,0)">
-                                                        <path d="M11.979,17.125c4.052,0,6.875-5.1,6.875-9.67c-0.001-0.95-0.136-1.895-0.4-2.808l0,0c-0.828-2.841-3.522-4.723-6.475-4.522 C9.029-0.063,6.342,1.818,5.51,4.654v0.009c-0.26,0.911-0.395,1.853-0.4,2.8C5.105,12.035,7.929,17.125,11.979,17.125z M16.617,11.281c-0.048,0.125-0.185,0.19-0.312,0.148c-1.395-0.412-2.846-0.599-4.3-0.554c-1.469-0.045-2.936,0.144-4.346,0.559 c-0.127,0.043-0.265-0.022-0.312-0.147c-0.42-1.088-0.664-2.235-0.722-3.4C6.619,7.818,6.642,7.751,6.689,7.7 c0.047-0.049,0.112-0.077,0.18-0.077H17.09c0.138,0,0.25,0.112,0.25,0.25c0,0.004,0,0.008,0,0.012 C17.28,9.048,17.036,10.194,16.617,11.281z M21.632,18.127c0.123,0.065,0.274,0.018,0.339-0.105C21.99,17.986,22,17.946,22,17.906 v-1.531c0-0.138,0.112-0.25,0.25-0.25H23c0.414,0,0.75-0.336,0.75-0.75s-0.336-0.75-0.75-0.75h-0.75c-0.138,0-0.25-0.112-0.25-0.25 v-3c0-0.828-0.672-1.5-1.5-1.5s-1.5,0.672-1.5,1.5v3c0,0.138-0.112,0.25-0.25,0.25H18c-0.414,0-0.75,0.336-0.75,0.75 s0.336,0.75,0.75,0.75h0.75c0.138,0,0.25,0.112,0.25,0.25v0.2c0,0.092,0.051,0.177,0.132,0.22L21.632,18.127z M23.033,19.792 c-0.759-0.561-1.581-1.031-2.45-1.4c-0.119-0.052-0.258-0.005-0.32,0.109l-1.181,1.667l-2.367,3.338 c-0.066,0.121-0.022,0.273,0.099,0.339c0.037,0.02,0.078,0.031,0.12,0.031H23.5c0.276,0,0.5-0.224,0.5-0.5V21.77 C24.007,20.995,23.648,20.263,23.033,19.792z M11.079,21.4l-3.527-3.968c-0.117-0.132-0.294-0.193-0.467-0.16 c-2.206,0.358-4.3,1.221-6.118,2.52C0.351,20.262-0.007,20.995,0,21.77v1.605c0,0.276,0.224,0.5,0.5,0.5h7.326 c0.073,0,0.142-0.032,0.19-0.087l3.066-2.06C11.162,21.633,11.161,21.493,11.079,21.4z M18.31,17.837 c-0.029-0.07-0.088-0.123-0.161-0.145c-0.244-0.069-0.5-0.136-0.76-0.2c-0.091-0.022-0.187,0.009-0.249,0.08l-0.633,0.586 l-5.731,5.305c-0.09,0.105-0.078,0.263,0.027,0.353c0.045,0.039,0.103,0.06,0.162,0.06h3.191c0.092,0,0.176-0.05,0.22-0.13 l3.068-4.452l0.855-1.24C18.335,17.987,18.339,17.907,18.31,17.837z M8.489,8.826C8.185,9.108,8.168,9.583,8.45,9.887 c0.282,0.304,0.757,0.321,1.061,0.039l0,0c0.173-0.097,0.384-0.097,0.557,0c0.304,0.282,0.779,0.265,1.061-0.039 c0.282-0.304,0.265-0.779-0.039-1.061C10.339,8.192,9.24,8.192,8.489,8.826z M13.421,10.125c0.19,0.001,0.372-0.071,0.511-0.2 c0.173-0.097,0.384-0.097,0.557,0c0.304,0.282,0.779,0.265,1.061-0.039c0.282-0.304,0.265-0.779-0.039-1.061 c-0.751-0.633-1.849-0.633-2.6,0c-0.304,0.282-0.322,0.756-0.04,1.06C13.013,10.038,13.213,10.125,13.421,10.125L13.421,10.125z" stroke="none" fill="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                            <span class="sidebar-menu-text">Profile</span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -334,25 +239,9 @@
                             </div>
                             <div class="col">
                                 <div class="d-flex flex-column flex">
-                                    <a href="#" class="text-body"><strong class="text-15pt">Marketing Team Meeting</strong></a>
+                                    <a href="#" class="text-body"><strong class="text-15pt">Appointment list will be visiable here</strong></a>
 
-                                    <small class="text-muted d-flex align-items-center"><i class="material-icons icon-16pt mr-1">location_on</i> 16845 Hicks Road</small>
-
-
-                                </div>
-                                <div class="avatar-group mt-2">
-
-                                    <div class="avatar avatar-xs">
-                                        <img src="assets/images/256_joao-silas-636453-unsplash.jpg" alt="Avatar" class="avatar-img rounded-circle">
-                                    </div>
-
-                                    <div class="avatar avatar-xs">
-                                        <img src="assets/images/256_jeremy-banks-798787-unsplash.jpg" alt="Avatar" class="avatar-img rounded-circle">
-                                    </div>
-
-                                    <div class="avatar avatar-xs">
-                                        <img src="assets/images/256_daniel-gaffey-1060698-unsplash.jpg" alt="Avatar" class="avatar-img rounded-circle">
-                                    </div>
+                                    <small class="text-muted d-flex align-items-center"><i class="material-icons icon-16pt mr-1">location_on</i>University of Dhaka</small>
 
                                 </div>
                             </div>
