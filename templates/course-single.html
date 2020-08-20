@@ -17,17 +17,8 @@
                             <i class="material-icons icon-16pt mr-1 text-muted">access_time</i> Total Session: {{ totalModule }}
                         </div>
                     </div>
-                    <div>
-                        <a href="#" class="btn btn-success">
-                            Buy:
-                            <strong>৳{{course.price}}</strong>
-                        </a>
-                    </div>
                 </div>
             </div>
-
-
-
 
 
             <div class="container page__container">
@@ -76,12 +67,23 @@
 
 
                     <div class="col-md-4">
+                        <div class="pb-3 mx-5">
+                            {% if is_enrolled %}
+                                <a href="{% url 'CourseSession' cid=course.id sid=first_module.id %}" class="btn btn-block btn-success">
+                                    <h4>Resume Course</h4>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'enrollCourse' id=course.id %}" class="btn btn-block btn-primary">
+                                    <h4>Enroll</h4>
+                                </a>
+                            {% endif %}
+                        </div>
 
-                        <!-- Lessons -->
+                        <!-- Sessions -->
                         <div class="card">
                             <div class="card-header card-header-large bg-light d-flex align-items-center">
                                 <div class="flex">
-                                    <h4 class="card-header__title">Course Lessons</h4>
+                                    <h4 class="card-header__title">Course Sessions</h4>
                                 </div>
                             </div>
 

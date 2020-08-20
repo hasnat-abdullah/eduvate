@@ -27,10 +27,9 @@
                         <div class="card card__course" data-aos="fade-up" data-offset="-100">
                             <img class="card-img-top" src="{{ c.featured_image.url }}" alt="Card image cap">
 
-                            <a class="card-header__title  justify-content-center align-left d-flex flex-column m-2" href="#">
-
-                                    <span class="course__subtitle">{{c.name}}</span>
-                                </a>
+                            <a class="card-header__title  justify-content-center align-left d-flex flex-column m-2" href="{% url 'singleCourse' id=c.id %}">
+                                <span class="course__subtitle">{{c.name}}</span>
+                            </a>
                             <div class="p-0">
                                 <div class="mb-2">
                                     <span class="mr-2">
