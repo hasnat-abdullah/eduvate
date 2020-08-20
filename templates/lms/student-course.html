@@ -22,10 +22,15 @@
                                 </div>
                             </div>
                             <div>
-                                <a href="#" class="btn btn-success">
-                                    Buy:
-                                    <strong>৳{{course.price}}</strong>
+                                {% if is_enrolled %}
+                                    <a href="{% url 'CourseSession' cid=course.id sid=first_module.id %}" class="btn btn-success">
+                                    Resume Course
                                 </a>
+                                {% else %}
+                                <a href="{% url 'enrollCourse' id=course.id %}" class="btn btn-primary">
+                                    Enroll
+                                </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

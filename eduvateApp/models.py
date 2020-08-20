@@ -406,23 +406,36 @@ class EnrolledCourse(models.Model):
 
 
 class EnrolledModule(models.Model):
-    enrolled_id = models.ForeignKey(EnrolledCourse, on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     module_id = models.ForeignKey(CourseModule,models.CASCADE, default=1)
     payment_status= models.ForeignKey(Payment, on_delete=models.PROTECT, null=True)
+    enrolment_status = models.CharField(max_length=11, choices=ENROLMENT_STATUS_CHOICES, default='notStarted')
     enrolled_module_on = models.DateField(auto_now=False, auto_now_add=True)
     last_visited_on = models.DateField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.module_id.name + " - " + self.enrolled_id.course_id.name
+        return self.module_id.name + " - " + self.student_id.name.username
 
 
-class completedLesson(models.Model):
+class CompletedLesson(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     lesson_id = models.ForeignKey(Lesson, on_delete=models.PROTECT, null=True)
     complete_lesson_on = models.DateField(auto_now=False, auto_now_add=True)
     updated_on = models.DateField(auto_now=True, auto_now_add=False)
     def __str__(self):
         return  self.student_id.name.username + " : " + self.lesson_id.module_id.name+ " : " + self.lesson_id.title
+
+
+class CompletedCourse(models.Model):
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.PROTECT)
+    complete_course_on = models.DateField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return  self.student_id.name.username + " : " + self.course_id.name
+
+
 
 
 class ScoreManager(models.Manager):

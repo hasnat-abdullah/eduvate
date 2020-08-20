@@ -99,18 +99,39 @@
                                                         <div class="media-body">
                                                             <a href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{l.title}}</a>
                                                         </div>
+                                                    <!--course complete sign
                                                         <div class="media-right">
-                                                            {% if request.path != this_url %}
                                                                 <i class="material-icons icon-16pt text-muted">check_circle</i>
-                                                            {% else %}
-                                                                <i class="material-icons icon-16pt text-success">check_circle</i>
-                                                            {% endif %}
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                 </li>
                                             {% endif %}
                                         {% endfor %}
                                 </ul>
+
+                                <!-- Sessions -->
+                                <div class="card">
+                                    <div class="card-header card-header-large bg-light d-flex align-items-center">
+                                        <div class="flex">
+                                            <h4 class="card-header__title">Session List</h4>
+                                        </div>
+                                    </div>
+
+                                    <ul class="list-group list-group-fit">
+                                        {% for m in module_list %}
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">{{ forloop.counter }}.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="{% url 'CourseSession' cid=course.id sid=m.id %}">{{m.name}}</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
 
                                 <div class="card">
                                     <div class="card-header card-header-large bg-light d-flex align-items-center">

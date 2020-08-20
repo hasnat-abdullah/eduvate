@@ -19,23 +19,77 @@ def getDashboard(request):
         return redirect('login')
     return render(request, 'lms/student-dashboard.html', {'dashboard_active':'active'})
 
+
+def getEnrollCourse(request,id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    current_student = get_object_or_404(Student,name=request.user.id)
+    if not current_student:
+        return redirect('signup')
+
+    course = get_object_or_404(Course,id=id)
+
+    if EnrolledCourse.objects.filter(student_id=current_student.id,course_id=course.id).exists():
+        last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student.id,lesson_id__module_id__course__id=course.id).order_by('lesson_id__lesson_position')[:1]
+
+    module_list = CourseModule.objects.filter(course=course.id).order_by('module_position')[:1]
+    first_module=''
+    first_lesson = ''
+    for m in module_list:
+        first_module=m
+        break
+
+    lesson_list = Lesson.objects.filter(module_id=first_module.id).order_by('lesson_position')[:1]
+    for l in lesson_list:
+        first_lesson = l.id
+
+    ######-----Enroll to the Course------####
+    obj, created = EnrolledCourse.objects.update_or_create(student_id=current_student, course_id=course)
+    ######-----Enroll to the first module------####
+    obj, created = EnrolledModule.objects.update_or_create(student_id=current_student, module_id=first_module)
+
+    return redirect('takeCourse',cid=course.id, sid=first_module.id, lid=first_lesson )
+
+
 def getSingleCourse(request,id):
     course = get_object_or_404(Course,id=id)
+    current_student = get_object_or_404(Student, id=request.user.id)
     instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
     module = CourseModule.objects.filter(course=course.id)
+    first_module=''
+    for m in module:
+        first_module=m
+        break
     totalModule = len(module)
+    is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
     relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
     context = {
         'course': course,
         'instructor':instructor,
         'module':module,
+        'first_module':first_module,
         'totalModule':totalModule,
         'relatedCourse':relatedCourse,
+        'is_enrolled':is_enrolled,
         'all_course_active':'active'
     }
     if request.user.is_authenticated:
         return render(request, 'lms/student-course.html',context)
     return render(request, 'course-single.html',context)
+
+
+def getCourseSession(request,cid,sid):
+    course = get_object_or_404(Course, id=cid)
+    current_student = get_object_or_404(Student,name=request.user.id)
+    module = get_object_or_404(CourseModule, id=sid)
+    instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
+    module_list = CourseModule.objects.filter(course=course.id)
+    lesson_list = Lesson.objects.filter(module_id=module.id)[:1]
+    lesson=''
+    for l in lesson_list:
+        lesson=l
+        break
+    return redirect('takeCourse',cid=course.id,sid=module.id,lid=lesson.id )
 
 
 def gettakeCourse(request,cid,sid,lid):
@@ -44,19 +98,39 @@ def gettakeCourse(request,cid,sid,lid):
 
     course = get_object_or_404(Course, id=cid)
     current_student = get_object_or_404(Student,name=request.user.id)
+    module = get_object_or_404(CourseModule, id=sid)
+    lesson = get_object_or_404(Lesson, id=lid)
+    enrolled_module_list = EnrolledModule.objects.filter(student_id=current_student.name.id, module_id=module.id).order_by('-enrolled_module_on')[:1]
+    enrolled_course_list = EnrolledCourse.objects.filter(student_id=current_student.name.id, course_id=course.id).order_by('-enrolled_on')[:1]
+    enrolled_module=''
+    enrolled_course=''
 
-    if not EnrolledCourse.objects.filter(student_id=current_student.name.id, course_id=course.id).exists():
+    for em in enrolled_module_list:
+        enrolled_module = em
+        break
+    for ec in enrolled_course_list:
+        enrolled_course = ec
+        break
+
+    #---if the student does not enrolled in requested course---
+    if not enrolled_course:
         return redirect('singleCourse', cid)
 
-    module = get_object_or_404(CourseModule,id=sid)
-    lesson = get_object_or_404(Lesson,id=lid)
+    # ---if the student does not enrolled in requested module---
+    if not enrolled_module:
+        return redirect('denied')
+
+    # ---if the student does not enrolled in this course---
+    if not (lesson.lesson_position==1 or CompletedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id=module.id,lesson_id__lesson_position=lesson.lesson_position-1).exists()):
+        return redirect('denied')
+    module_list = CourseModule.objects.filter(course=course.id)
     lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')
     total_lesson = Lesson.objects.filter(module_id__course__id=course.id).count()
-    total_completed_lesson = completedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id__course__id=course.id).count()
+    total_completed_lesson = CompletedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id__course__id=course.id).count()
     percentage_complete = int((total_completed_lesson*100)/total_lesson)
 
     ######-----Mark as complete this lesson------####
-    obj, created = completedLesson.objects.update_or_create(student_id=current_student, lesson_id=lesson)
+    obj, created = CompletedLesson.objects.update_or_create(student_id=current_student, lesson_id=lesson)
 
 
     ######-----Next button url----########
@@ -65,8 +139,15 @@ def gettakeCourse(request,cid,sid,lid):
     for l in lesson_list:
         if l.lesson_position>lesson.lesson_position:
             next_Lesson_id=l.id
+            # if next lesson found, update module status 'completed'
+            enrolled_module.enrolment_status = 'partial'
+            enrolled_module.save()
             break
     if not next_Lesson_id:
+        #if no next lesson found, update module status 'completed'
+        enrolled_module.enrolment_status = 'completed'
+        enrolled_module.save()
+
         next_module= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position)[:1]
         for m in next_module:
             next_module_id=m.id
@@ -75,6 +156,10 @@ def gettakeCourse(request,cid,sid,lid):
             next_lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')[:1]
             for l in next_lesson_list:
                 next_Lesson_id = l.id
+
+    ######-----Mark as complete this course if there is no lesson left------####
+    if not next_Lesson_id:
+        obj, created = CompletedCourse.objects.update_or_create(student_id=current_student, course_id=course, )
 
     relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
 
@@ -86,6 +171,7 @@ def gettakeCourse(request,cid,sid,lid):
         'relatedCourse':relatedCourse,
         'next_Lesson_id':next_Lesson_id,
         'next_module_id':next_module_id,
+        'module_list':module_list,
         'percentage_complete':percentage_complete,
         'running_course_active':'active'
     }
@@ -253,3 +339,7 @@ def getRunningCourse(request):
 
 def getPayment(request):
     return render(request, 'payment.html')
+
+
+def getDenied(request,):
+    return render(request, 'lms/access-denied.html')
