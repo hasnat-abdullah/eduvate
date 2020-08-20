@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import dj_database_url
 import os
+import django_heroku
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -171,3 +172,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert alert-danger',
     messages.DEBUG: 'alert alert-info',
 }
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
