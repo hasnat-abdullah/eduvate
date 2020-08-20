@@ -240,6 +240,19 @@ def getScale(request, scaleId):
         return render(request, 'scale_guest.html',context)
 
 
+def getTestResult(request):
+    if not request.user.is_authenticated:
+        redirect('scaleList')
+    test_result = MeasuringScaleForModuleResult.objects.filter(user_id=request.user.id).order_by('-created_on')
+    score = ScoringDetails.objects.all().order_by('scale_id','-to_value')
+    context = {
+        'test_result': test_result,
+        'score':score,
+        'self_test_result_active':'active'
+    }
+    return render(request, 'lms/student-test-result.html',context)
+
+
 def getScaleList(request):
     scale = MeasuringScale.objects.all().order_by('name')
     context = {

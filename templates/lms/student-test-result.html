@@ -1,0 +1,65 @@
+{% extends 'lms/base_student.html' %}
+{% load static %}
+{% block title %}{{course.name}} {% endblock %}
+{% block stylesheet %}{% endblock %}
+{% block notifications %}{% endblock %}
+{% block content %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+    <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
+    <div class="mdk-drawer-layout__content page">
+
+        <div class="container-fluid page__heading-container">
+            <div class="page__heading  pb-2 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-between text-center text-lg-left">
+                <div>
+                    <h1 class="m-lg-0">Self Test Results</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid page__container">
+
+            <div class="card">
+                <div class="card-header bg-light d-flex align-items-center">
+                    <div class="flex">
+                        <h4 class="card-header__title">Self test record of {{request.user.get_full_name}}</h4>
+                    </div>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="table-responsive border-bottom" >
+                        <table class="table mb-0 thead-border-top-0">
+                            <thead>
+                            <tr>
+                                <th style="width:5px"></th>
+                                <th><a class="sort" href="#">Name of Scale</a></th>
+                                <th>Marks</th>
+                                <th>Result</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody class="list" id="">
+                            {% for t in test_result %}
+                                <tr class="questionCount">
+                                    <td class="text-muted">{{ forloop.counter }}</td>
+                                    <td>{{ t.scale_id.name }}</td>
+                                    <td>{{ t.scale_id.totalMarks }}</td>
+                                    <td>{{ t.scale_id.result }}</td>
+                                    <td>{{ t.scale_id.created_on }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block usersrole %}Administrator{% endblock %}
+{% block usersrole2 %}Administrator{% endblock %}
+{% block todoblock %}{% endblock %}
+{% block javascript %}{% endblock %}

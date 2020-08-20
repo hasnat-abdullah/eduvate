@@ -460,6 +460,7 @@ class MeasuringScaleForModuleResult(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     scale_name = models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
     totalMarks = models.PositiveSmallIntegerField()
+    result = models.CharField(max_length=25, null=True)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
 
     def __str__(self):

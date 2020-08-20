@@ -11,8 +11,8 @@
         <div class="mdk-drawer-layout__content page">
 
             <div class="container-fluid page__container">
-
-                <div class="card card-form">
+                <div class="row">
+                    <div class="card card-form">
                         <div class=" card-body">
                             <h4><strong class="card-header__title m-0">{{scale.name}}</strong></h4>
                             <p class="text-muted">{{scale.description}}</p>
@@ -22,7 +22,7 @@
 
                             <div class="table-responsive border-bottom" >
                                 <form class="radio-button-form" method="POST">
-                                {%  csrf_token %}
+                                    {%  csrf_token %}
                                     <table class="table mb-0 thead-border-top-0">
                                         <thead>
                                         <tr>
@@ -52,8 +52,8 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
                 </div>
-
             </div>
         </div>
 
