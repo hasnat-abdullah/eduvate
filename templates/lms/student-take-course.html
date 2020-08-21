@@ -212,6 +212,32 @@
 {% block usersname2 %}Hasnat Abdullah{% endblock %}
 {% block usersrole2 %}Administrator{% endblock %}
 {% block todoblock %}{% endblock %}
+{% block modal %}
+    {% if lesson.lesson_type == 'scale' %}
+        <!-- Success Alert Modal -->
+        <div id="modal-success" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content bg-success">
+                    <div class="modal-body text-center p-4">
+                        <i class="material-icons icon-40pt text-white mb-2">check</i>
+                        <h4 class="text-white">Well Done!</h4>
+                        <h3 id="score" class="text-white mt-3">Score</h3>
+                        <h2 id='level' class="text-warning mt-3">Result</h2>
+                        {% if next_Lesson_id %}
+                            <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id  %}" class="m-lg-1 btn btn-light my-2">
+                                Next Lesson<i class="material-icons mr-1">navigate_next</i>
+                            </a>
+                        {% else %}
+                            <a href="{%  url 'dashboard'  %}" class="m-lg-1 btn btn-success">
+                                Course Complete <i class="material-icons mr-1 ">check_circle</i>
+                            </a>
+                        {% endif %}
+                    </div> <!-- // END .modal-body -->
+                </div> <!-- // END .modal-content -->
+            </div> <!-- // END .modal-dialog -->
+        </div> <!-- // END .modal -->
+    {% endif %}
+{% endblock %}
 {% block javascript %}
     {% if lesson.lesson_type == 'scale' %}
     <script>
@@ -234,7 +260,7 @@
                 }
             {% endfor %}
                 document.getElementById("score").innerHTML = "Score: "+total;
-                document.getElementById("level").innerHTML = "Depression Level: "+result;
+                document.getElementById("level").innerHTML = "Level: "+result;
                 $("#modal-success").modal();
                 //Data send to server to save
                 $.ajax({
