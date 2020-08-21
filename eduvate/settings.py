@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECRET_KEY = os.environ.get('SECRET_KEY')
 # EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'oer7^lh+%d-xvw22!6fk6w)zwrklz=q$giu2thps=99z*gt=rc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
