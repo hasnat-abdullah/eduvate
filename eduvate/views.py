@@ -66,7 +66,7 @@ def getEnrollCourse(request,id):
 
 def getSingleCourse(request,id):
     course = get_object_or_404(Course,id=id)
-    current_student = get_object_or_404(Student, id=request.user.id)
+
     instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
     module = CourseModule.objects.filter(course=course.id)
     first_module=''
@@ -74,7 +74,7 @@ def getSingleCourse(request,id):
         first_module=m
         break
     totalModule = len(module)
-    is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
+
     relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
     context = {
         'course': course,
@@ -83,10 +83,12 @@ def getSingleCourse(request,id):
         'first_module':first_module,
         'totalModule':totalModule,
         'relatedCourse':relatedCourse,
-        'is_enrolled':is_enrolled,
         'all_course_active':'active'
     }
     if request.user.is_authenticated:
+        current_student = Student.objects.get(name=request.user.id)
+        is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
+        context['is_enrolled']=is_enrolled
         return render(request, 'lms/student-course.html',context)
     return render(request, 'course-single.html',context)
 
