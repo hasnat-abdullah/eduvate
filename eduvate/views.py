@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from eduvateApp.models import *
 from django.http import HttpResponseRedirect
-from .forms import RegisterForm
+from .forms import RegisterForm,FeedbackForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -188,6 +188,26 @@ def gettakeCourse(request,cid,sid,lid):
 
     relatedCourse = Course.objects.filter(category=course.category).exclude(id=course.id)[:3].select_related('category')
 
+    #--------------Feedback form------------
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+    # check whether it's valid:
+        if form.is_valid():
+            ff= Feedback(student_id=current_student,course_id=course,
+                         quality=form.cleaned_data['quality'],
+                         satisfaction=form.cleaned_data['satisfaction'],
+                         good_comment=form.cleaned_data['good_comment'],
+                         bad_comment=form.cleaned_data['bad_comment'],
+                         opinion=form.cleaned_data['opinion'])
+            ff.save()
+            if next_Lesson_id:
+                return redirect('takeCourse', cid=course.id, sid=next_module_id, lid=next_Lesson_id)
+            else:
+                return redirect('dashboard')
+    form=''
+    if lesson.lesson_type=='feedback':
+        form = FeedbackForm()
+
     context = {
         'course': course,
         'module':module,
@@ -202,6 +222,7 @@ def gettakeCourse(request,cid,sid,lid):
         'next_module_id':next_module_id,
         'module_list':module_list,
         'percentage_complete':percentage_complete,
+        'form':form,
         'running_course_active':'active'
     }
     return render(request, 'lms/student-take-course.html',context)

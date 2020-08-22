@@ -34,9 +34,8 @@
                                         </div>
                                     </div>
                                 {% endif %}
-
-                                {% if lesson.lesson_type != 'scale' %}
-
+                                <!---------Lesson body--------->
+                                {% if lesson.lesson_type == 'content' %}
                                     <div class="card">
                                         <div class="card-header card-header-tabs-basic nav border-top">
                                             <div class="flex">
@@ -60,7 +59,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% else %}
+                                {% elif lesson.lesson_type == 'scale' %}
                                     <div class="card card-form">
                                         <div class=" card-body">
                                             <h4><strong class="card-header__title m-0">{{scale.scale_name.name}}</strong></h4>
@@ -100,6 +99,46 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="card">
+                                        <div class="card-header card-header-tabs-basic nav border-top">
+                                            <div class="flex">
+                                                <h4 class="m-lg-1">আপনার মতামত</h4>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ lesson.description|safe }}
+                                            <!---------Feedback Form----------->
+                                            <form action="#" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="{{ form.quality.id_for_label }}">এই প্রোগ্রামটির গঠন, বিষয়বস্তু, ভাষা তথা সার্বিক গুনাগুন সম্পর্কে আপনার মতামত ০%-১০০% এর মধ্যে প্রকাশ করুন। যেখানে ০% মানে সার্বিক গুনাগুনের সর্বনিম্ন মাত্রা এবং ১০০% মানে  সার্বিক গুনাগুনের সর্বোচ্চ মাত্রা।</label>
+                                                    {{ form.quality }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ form.satisfaction.id_for_label }}">এই প্রোগ্রাম-এ আপনি কতটুকু সন্তুষ্ট তা ০%-১০০% এর মধ্যে প্রকাশ করুন। যেখানে ০% মানে সন্তুষ্টির সর্বনিম্ন মাত্রা এবং ১০০% মানে  সন্তুষ্টির সর্বোচ্চ মাত্রা।</label>
+                                                    {{ form.satisfaction }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ form.good_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি আপনার কাছে ভালো লেগেছে এবং কেন?</label>
+                                                    {{ form.good_comment }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ form.bad_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি আপনার কাছে ভালো লাগেনি এবং কেন লাগেনি? আপনার অভিযোগটি লিখুন। </label>
+                                                    {{ form.bad_comment }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ form.opinion.id_for_label }}">এই প্রোগ্রামটি সম্পর্কে আপনার নিজস্ব কোনো মতামত বা পরামর্শ আছে কি? থাকলে সেটি লিখুন।</label>
+                                                    {{ form.opinion }}
+                                                </div>
+                                                <!----------------End form--------------->
+
+                                                <div class="form-group text-center">
+                                                    <button class="btn btn-success btn-lg btn-block mb-3" type="submit">Submit</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 {% endif %}

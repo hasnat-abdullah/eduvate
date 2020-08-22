@@ -20,6 +20,13 @@ class RegisterForm(forms.Form):
     mental_treatment_type = forms.ChoiceField(required=False,choices=TREATMENT_STATUS_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
     knowing_source = forms.ChoiceField(choices=KNOWING_WEBSITE_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
     medicine_taken_duration = forms.CharField(required=False, max_length=25, widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'type': 'tel', 'placeholder': '3 months'}))
-    physical_problem = forms.CharField(required=False,max_length=80, widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'placeholder': 'Current city'}))
-    address = forms.CharField(required=True, min_length=3, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'placeholder': 'Current city'}))
+    physical_problem = forms.CharField(required=False,max_length=80, widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}))
+    address = forms.CharField(required=True, min_length=3, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'placeholder': 'your address'}))
 
+
+class FeedbackForm(forms.Form):
+    quality = forms.CharField(required=True,widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'type':'text', 'data-toggle':'ion-rangeslider', 'data-min':'0', 'data-max':'100', 'data-from':'0', 'data-grid':'true'}))
+    satisfaction = forms.CharField(required=True,widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended', 'type':'text', 'data-toggle':'ion-rangeslider', 'data-min':'0', 'data-max':'100', 'data-from':'0', 'data-grid':'true'}))
+    good_comment = forms.CharField(max_length=400, required=True,widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}))
+    bad_comment = forms.CharField(max_length=400,required=True,widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}))
+    opinion = forms.CharField(max_length=400,required=True,widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}))

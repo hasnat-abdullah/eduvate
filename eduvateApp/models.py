@@ -197,7 +197,8 @@ class CourseModule(models.Model):
 
 LESSON_CHOICE= (
         ('content', 'Content'),
-        ('scale', 'Scale')
+        ('scale', 'Scale'),
+        ('feedback', 'Feedback Form')
     )
 
 class Lesson(models.Model):
@@ -505,7 +506,22 @@ class Booking (models.Model):
         return self.booked_by.name.username+"; "+ str(self.booking_date) + ": " + str(self.slot_id.from_time) +"-"+ str(self.slot_id.to_time)
 
 
+#================================#
+#=============Feedback===========#
+#================================#
 
-#================================#
-#===============Exam=============#
-#================================#
+class Feedback(models.Model):
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.PROTECT)
+    quality = models.CharField(max_length=4, null=True, blank=True)
+    satisfaction = models.CharField(max_length=4, null=True, blank=True)
+    good_comment = models.CharField(max_length=400, null=True, blank=True)
+    bad_comment = models.CharField(max_length=400, null=True, blank=True)
+    opinion = models.CharField(max_length=400, null=True, blank=True)
+    complete_course_on = models.DateField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return  self.course_id.name + " : " + self.student_id.name.username
+
+
