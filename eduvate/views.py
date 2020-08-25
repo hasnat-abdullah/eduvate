@@ -180,6 +180,8 @@ def gettakeCourse(request,cid,sid,lid):
             break
         if next_module_id !=module.id:
             next_lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')[:1]
+            em = EnrolledModule(student_id=current_student, module_id=next_module_id)
+            em.save()
             for l in next_lesson_list:
                 next_Lesson_id = l.id
 
