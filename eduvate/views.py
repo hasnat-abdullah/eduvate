@@ -173,14 +173,15 @@ def gettakeCourse(request,cid,sid,lid):
         #if no next lesson found, update module status 'completed'
         enrolled_module.enrolment_status = 'completed'
         enrolled_module.save()
-
-        next_module= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position)[:1]
-        for m in next_module:
+        next_module=''
+        next_module_list= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position)[:1]
+        for m in next_module_list:
+            next_module=m
             next_module_id=m.id
             break
         if next_module_id !=module.id:
             next_lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')[:1]
-            em = EnrolledModule(student_id=current_student, module_id=next_module_id)
+            em = EnrolledModule(student_id=current_student, module_id=next_module)
             em.save()
             for l in next_lesson_list:
                 next_Lesson_id = l.id
