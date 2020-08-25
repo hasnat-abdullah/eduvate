@@ -82,7 +82,7 @@ class AnswerDetails(models.Model):
     value = models.SmallIntegerField(null=False, default=1)
 
     def __str__(self):
-        return self.scale_id.name +": "+ self.choice
+        return self.scale_id.name +": "+ self.choice+"-serial: "+ str(self.serial)+"- value: "+ str(self.value)
 
 
 class ScoringDetails(models.Model):
