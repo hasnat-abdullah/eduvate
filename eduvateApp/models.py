@@ -452,8 +452,8 @@ class CompletedCourse(models.Model):
 
 
 class ScoreManager(models.Manager):
-    def create_score(self, username, scale_name, totalMarks):
-        studentScore = self.create(user_id=username,scale_name=scale_name,totalMarks=totalMarks,created_on=datetime.now)
+    def create_score(self, username, scale_name, totalMarks, result):
+        studentScore = self.create(user_id=username,scale_name=scale_name,totalMarks=totalMarks,result=result,created_on=datetime.now)
         return studentScore
 
 
@@ -461,7 +461,7 @@ class MeasuringScaleForModuleResult(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     scale_name = models.ForeignKey(MeasuringScale, on_delete=models.CASCADE)
     totalMarks = models.PositiveSmallIntegerField()
-    result = models.CharField(max_length=25, null=True)
+    result = models.CharField(max_length=80, null=True)
     created_on = models.DateField(auto_now=False, auto_now_add=True)
 
     def __str__(self):

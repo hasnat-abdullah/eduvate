@@ -234,11 +234,11 @@ def getSaveScore(request,scaleId):
     if request.user.is_authenticated:
         user= request.user.username
         scale = get_object_or_404(MeasuringScale, id=scaleId)
-        scaleScore = request.POST["score"]
         scaleToSave = MeasuringScaleForModuleResult.objects.create_score(
             request.user,
             scale,
             request.POST["score"],
+            request.POST["result"]
         )
         scaleToSave.save()
         return redirect('dashboard')

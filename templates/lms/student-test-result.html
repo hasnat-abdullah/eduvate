@@ -43,10 +43,10 @@
                             {% for t in test_result %}
                                 <tr class="questionCount">
                                     <td class="text-muted">{{ forloop.counter }}</td>
-                                    <td>{{ t.scale_id.name }}</td>
-                                    <td>{{ t.scale_id.totalMarks }}</td>
-                                    <td>{{ t.scale_id.result }}</td>
-                                    <td>{{ t.scale_id.created_on }}</td>
+                                    <td>{{ t.scale_name.name }}</td>
+                                    <td>{{ t.totalMarks }}</td>
+                                    <td>{{ t.result }}</td>
+                                    <td>{{ t.created_on }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
