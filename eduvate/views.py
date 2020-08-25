@@ -174,17 +174,17 @@ def gettakeCourse(request,cid,sid,lid):
         enrolled_module.enrolment_status = 'completed'
         enrolled_module.save()
         next_module=''
-        next_module_list= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position)[:1]
+        next_module_list= CourseModule.objects.filter(course=course.id, module_position__gt=module.module_position).order_by('module_position')[:1]
         for m in next_module_list:
             next_module=m
             next_module_id=m.id
-            break
-        if next_module_id !=module.id:
-            next_lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')[:1]
+
+            next_lesson_list = Lesson.objects.filter(module_id=next_module.id).order_by('lesson_position')[:1]
             em = EnrolledModule(student_id=current_student, module_id=next_module)
             em.save()
             for l in next_lesson_list:
                 next_Lesson_id = l.id
+            break
 
     ######-----Mark as complete this course if there is no lesson left------####
     if not next_Lesson_id:
