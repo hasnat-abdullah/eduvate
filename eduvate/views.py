@@ -52,16 +52,16 @@ def getEnrollCourse(request,id):
 
     lesson_list = Lesson.objects.filter(module_id=first_module.id).order_by('lesson_position')[:1]
     for l in lesson_list:
-        first_lesson = l.id
+        first_lesson = l
 
-    if not EnrolledCourse.objects.filter(student_id=current_student.id,course_id=course.id).exists():
+    if  not (EnrolledCourse.objects.filter(student_id=current_student.id,course_id=course.id).exists()):
         ec = EnrolledCourse(student_id=current_student, course_id=course, percent_complited=0)
         ec.save()
         em = EnrolledModule(student_id=current_student, module_id=first_module)
         em.save()
         #last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student.id,lesson_id__module_id__course__id=course.id).order_by('lesson_id__lesson_position')[:1]
 
-    return redirect('takeCourse',cid=course.id, sid=first_module.id, lid=first_lesson )
+    return redirect('takeCourse',cid=course.id, sid=first_module.id, lid=first_lesson.id )
 
 
 def getSingleCourse(request,id):
@@ -115,8 +115,8 @@ def gettakeCourse(request,cid,sid,lid):
     current_student = get_object_or_404(Student,name=request.user.id)
     module = get_object_or_404(CourseModule, id=sid)
     lesson = get_object_or_404(Lesson, id=lid)
-    enrolled_module_list = EnrolledModule.objects.filter(student_id=current_student.name.id, module_id=module.id).order_by('-enrolled_module_on')[:1]
-    enrolled_course_list = EnrolledCourse.objects.filter(student_id=current_student.name.id, course_id=course.id).order_by('-enrolled_on')[:1]
+    enrolled_module_list = EnrolledModule.objects.filter(student_id=current_student.id, module_id=module.id).order_by('-enrolled_module_on')[:1]
+    enrolled_course_list = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).order_by('-enrolled_on')[:1]
     enrolled_module=''
     enrolled_course=''
 
@@ -136,7 +136,7 @@ def gettakeCourse(request,cid,sid,lid):
         return redirect('denied')
 
     # ---if the student does not enrolled in this course---
-    if not (lesson.lesson_position==1 or CompletedLesson.objects.filter(student_id=request.user.id, lesson_id__module_id=module.id,lesson_id__lesson_position=lesson.lesson_position-1).exists()):
+    if not (lesson.lesson_position==1 or CompletedLesson.objects.filter(student_id=current_student.id, lesson_id__module_id=module.id,lesson_id__lesson_position=lesson.lesson_position-1).exists()):
         return redirect('denied')
 
     module_list = CourseModule.objects.filter(course=course.id)
