@@ -45,3 +45,9 @@ admin.site.register(StudentWorkHistory)
 admin.site.register(CompletedLesson)
 admin.site.register(CompletedCourse)
 
+class MeasuringScaleForModuleResultModel(admin.ModelAdmin):
+    list_display = ["__str__", "scale_name.name","totalMarks","result","created_on"]
+    search_fields = ["__str__", "scale_name.name","totalMarks","result","created_on"]
+    class Meta:
+        Model = MeasuringScaleForModuleResult
+admin.site.register(MeasuringScaleForModuleResult)
