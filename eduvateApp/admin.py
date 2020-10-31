@@ -29,14 +29,14 @@ admin.site.register(ScoringDetails)
 
 class StudentModel(admin.ModelAdmin):
     list_display = ["__str__", "age","gender","address","education","ocupation","religion","marial_status","socio_economic_status","mental_problem","mental_treatment_type","medicine_taken_duration","physical_problem","knowing_source","created_on"]
-    list_filter = ["__str__", "age","gender","address","education","ocupation","religion","marial_status","socio_economic_status","mental_problem","mental_treatment_type","medicine_taken_duration","physical_problem","knowing_source","created_on"]
+    #list_filter = ["__str__", "age","gender","address","education","ocupation","religion","marial_status","socio_economic_status","mental_problem","mental_treatment_type","medicine_taken_duration","physical_problem","knowing_source","created_on"]
     class Meta:
         Model = Student
 admin.site.register(Student, StudentModel)
 
 class EnrolledCourseModel(admin.ModelAdmin):
     list_display = ["course_id","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
-    list_filter = ["course_id","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
+    #list_filter = ["course_id","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
     class Meta:
         Model = EnrolledCourse
 admin.site.register(EnrolledCourse,EnrolledCourseModel)
@@ -47,7 +47,7 @@ admin.site.register(CompletedCourse)
 
 class MeasuringScaleForModuleResultModel(admin.ModelAdmin):
     list_display = ["__str__", "scale_name","totalMarks","result","created_on"]
-    list_filter = ["__str__", "scale_name","totalMarks","result","created_on"]
+    #list_filter = ["__str__", "scale_name","totalMarks","result","created_on"]
     class Meta:
         Model = MeasuringScaleForModuleResult
 admin.site.register(MeasuringScaleForModuleResult,MeasuringScaleForModuleResultModel)
