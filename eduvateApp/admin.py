@@ -27,7 +27,18 @@ admin.site.register(QuestionDetails)
 admin.site.register(AnswerDetails)
 admin.site.register(ScoringDetails)
 
+class StudentModel(admin.ModelAdmin):
+    list_display = ["__str__", "age","gender","address","education","ocupation","religion","marial_status","socio_economic_status","mental_problem","mental_treatment_type","medicine_taken_duration","physical_problem","knowing_source","created_on"]
+    search_fields = ["__str__", "age","gender","address","education","ocupation","religion","marial_status","socio_economic_status","mental_problem","mental_treatment_type","medicine_taken_duration","physical_problem","knowing_source","created_on"]
+    class Meta:
+        Model = Student
 admin.site.register(Student)
+
+class EnrolledCourseModel(admin.ModelAdmin):
+    list_display = ["course_id.name","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
+    search_fields = ["course_id.name","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
+    class Meta:
+        Model = EnrolledCourse
 admin.site.register(EnrolledCourse)
 admin.site.register(EnrolledModule)
 admin.site.register(StudentWorkHistory)
