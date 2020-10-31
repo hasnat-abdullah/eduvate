@@ -35,8 +35,8 @@ class StudentModel(admin.ModelAdmin):
 admin.site.register(Student, StudentModel)
 
 class EnrolledCourseModel(admin.ModelAdmin):
-    list_display = ["course_id.name","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
-    search_fields = ["course_id.name","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
+    list_display = ["course_id","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
+    search_fields = ["course_id","__str__", "enrolment_status","percent_complited","enrolled_on","enrolled_on"]
     class Meta:
         Model = EnrolledCourse
 admin.site.register(EnrolledCourse,EnrolledCourseModel)
@@ -46,8 +46,8 @@ admin.site.register(CompletedLesson)
 admin.site.register(CompletedCourse)
 
 class MeasuringScaleForModuleResultModel(admin.ModelAdmin):
-    list_display = ["__str__", "scale_name.name","totalMarks","result","created_on"]
-    search_fields = ["__str__", "scale_name.name","totalMarks","result","created_on"]
+    list_display = ["__str__", "scale_name","totalMarks","result","created_on"]
+    search_fields = ["__str__", "scale_name","totalMarks","result","created_on"]
     class Meta:
         Model = MeasuringScaleForModuleResult
 admin.site.register(MeasuringScaleForModuleResult,MeasuringScaleForModuleResultModel)
