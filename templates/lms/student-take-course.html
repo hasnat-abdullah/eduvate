@@ -304,9 +304,10 @@
                 //Data send to server to save
                 $.ajax({
                     type: 'POST',
-                    url: '{% url 'saveScore' scaleId=scale.scale_name.id %}',
+                    url: '{% url 'saveScore' scaleId=scale.id %}',
                     data: {
                         score: total,
+                        result: result,
                         csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
                     },
                     success:function() {
