@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from .forms import RegisterForm,FeedbackForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def getIndex(request):
     course = Course.objects.all().order_by('-updated_on')
@@ -247,6 +249,23 @@ def getSaveScore(request,scaleId):
         return redirect('dashboard')
     return render(request, 'lms/student-dashboard.html')
 
+@csrf_exempt
+def getSaveLessonFeedback(request,lessonId):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user= request.user.id
+            lesson = get_object_or_404(Lesson, id=lessonId)
+            student = get_object_or_404(Student, name=user)
+            inputtedData = request.POST
+            inputToSave = LessonFeedbackCollection.objects.create(
+                student_id=student,
+                lesson=lesson,
+                data=inputtedData
+            )
+            inputToSave.save()
+            payload = {'success': True}
+            return HttpResponse(json.dumps(payload), content_type='application/json')
+        return render(request, 'lms/student-dashboard.html')
 
 def getScale(request, scaleId):
     scale = get_object_or_404(MeasuringScale,id=scaleId)

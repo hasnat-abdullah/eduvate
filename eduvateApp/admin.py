@@ -51,3 +51,18 @@ class MeasuringScaleForModuleResultModel(admin.ModelAdmin):
     class Meta:
         Model = MeasuringScaleForModuleResult
 admin.site.register(MeasuringScaleForModuleResult,MeasuringScaleForModuleResultModel)
+
+class FeedbackModel(admin.ModelAdmin):
+    list_display = ["__str__", "quality","satisfaction","good_comment","bad_comment","opinion","complete_course_on"]
+    list_filter = ["course_id", "quality", "satisfaction"]
+    class Meta:
+        Model = Feedback
+admin.site.register(Feedback,FeedbackModel)
+
+class LessonFeedbackCollectionModel(admin.ModelAdmin):
+    list_display = ["__str__","student_id","lesson","data","created_on"]
+    #list_filter = ["courseAndModuleAnsLessonName"]
+    search_fields = ["student_id__name__username"]
+    class Meta:
+        Model = LessonFeedbackCollection
+admin.site.register(LessonFeedbackCollection,LessonFeedbackCollectionModel)

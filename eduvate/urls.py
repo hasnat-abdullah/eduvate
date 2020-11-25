@@ -37,6 +37,7 @@ urlpatterns = [
     path('scales/', views.getScaleList, name='scaleList'),
     path('scale/<int:scaleId>/', views.getScale, name='scale'),
     path('save_score/<int:scaleId>/', views.getSaveScore, name='saveScore'),
+    path('save_user_input/<int:lessonId>/', views.getSaveLessonFeedback, name='saveUserInput'),
     path('test_result/', views.getTestResult, name='testResult'),
     path('payment', views.getPayment, name='payment'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
