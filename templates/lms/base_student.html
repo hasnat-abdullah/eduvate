@@ -64,20 +64,17 @@
                             </a>
                         </div>
 
-                        <ul class="nav navbar-nav d-none d-lg-flex pl-2">
-                            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
-							<li class="nav-item"><a href="{% url 'course' %}" class="nav-link">Courses</a></li>
-							<li class="nav-item"><a href="{% url 'scaleList' %}" class="nav-link">Self test</a></li>
-                        </ul>
 
-                        <form class="search-form search-form--light d-none d-sm-flex flex ml-3" action="{% url 'index' %}">
-                            <input type="text" class="form-control" placeholder="Search">
-                            <button class="btn" type="submit"><i class="material-icons">search</i></button>
-                        </form>
+
 
 
                         <ul class="nav navbar-nav d-none d-md-flex">
                             <li class="nav-item">
+                                <form class="search-form search-form--light d-none d-sm-flex flex ml-3"
+                                      action="{% url 'index' %}">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                    <button class="btn" type="submit"><i class="material-icons">search</i></button>
+                                </form>
                                 <a href="#events-drawer" data-toggle="sidebar" class="nav-link d-flex align-items-center">
                                     <span class=" nav-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40" width="25" height="25">
@@ -115,8 +112,17 @@
                                             <span class="avatar-title rounded-circle bg-soft-secondary text-muted">AD</span>
                                         </span>
                                         <span class="flex d-flex flex-column">
-                                            <strong>{{user.get_short_name}}</strong>
-                                            <small class="text-muted text-uppercase">{% block usersrole2 %}{% endblock %}</small>
+                                            <strong>{{user.get_short_name|capfirst}}</strong>
+                                            <small class="text-muted text-uppercase">
+                                                {% if request.user.is_superuser %}
+                                                    Administrator
+                                                {% elif request.user.is_staff %}
+                                                    Counselor
+                                                {% else %}
+                                                    Client
+                                                {% endif %}
+
+                                            </small>
                                         </span>
                                     </a>
                                     <div class="dropdown ml-auto">

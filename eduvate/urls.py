@@ -16,32 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url,include
 from django.urls import path
-from eduvate import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.getIndex, name='index'),
-    path('login', views.getLogin, name='login'),
-    path('signup', views.getSignup, name='signup'),
-    path('logout', views.getLogout, name='logout'),
-    path('dashboard', views.getDashboard, name='dashboard'),
-    path('course', views.getCourse, name='course'),
-    path('enroll_course/<int:id>/', views.getEnrollCourse, name='enrollCourse'),
-    path('running-course', views.getRunningCourse, name='runningCourse'),
-    path('course/<int:id>/', views.getSingleCourse, name='singleCourse'),
-    path('permission_denied/', views.getDenied, name='denied'),
-    path('course/<int:cid>/<int:sid>', views.getCourseSession, name='CourseSession'),
-    path('course/<int:cid>/<int:sid>/<int:lid>', views.gettakeCourse, name='takeCourse'),
-    path('scales/', views.getScaleList, name='scaleList'),
-    path('scale/<int:scaleId>/', views.getScale, name='scale'),
-    path('save_score/<int:scaleId>/', views.getSaveScore, name='saveScore'),
-    path('save_user_input/<int:lessonId>/', views.getSaveLessonFeedback, name='saveUserInput'),
-    path('test_result/', views.getTestResult, name='testResult'),
-    path('payment', views.getPayment, name='payment'),
+    path('', include('eduvateApp.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#if settings.DEBUG:
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
