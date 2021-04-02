@@ -44,6 +44,11 @@ class EnrollCourseView(View):
 
         first_lesson = Lesson.objects.filter(module_id=first_module.id).order_by('lesson_position').first()
 
+        if first_module is None:
+            return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! There is no Module/Session for this Course</h1>', status=400)
+        elif first_lesson is None:
+            return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! There is no Lesson for this Course</h1>', status=400)
+
         if not (EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()):
             ec = EnrolledCourse(student_id=current_student, course_id=course, percent_complited=0)
             ec.save()
@@ -76,12 +81,15 @@ class CourseDetailsView(View):
             'relatedCourse': relatedCourse,
             'all_course_active': 'active'
         }
-
-        if request.user.is_authenticated:
-            current_student = Student.objects.get(name=request.user.id)
-            is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
-            context['is_enrolled'] = is_enrolled
+        try:
+            if request.user.is_authenticated:
+                current_student = Student.objects.get(name=request.user.id)
+                is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
+                context['is_enrolled'] = is_enrolled
+                return render(request, self.authenticated_template, context)
+        except Student.DoesNotExist:
             return render(request, self.authenticated_template, context)
+
 
         return render(request, self.unauthenticated_template, context)
 
@@ -143,7 +151,7 @@ class TakeCourseView(View):
             enrolled_module.save()
             next_module = CourseModule.objects.filter(course=course.id,
                                                       module_position__gt=module.module_position).order_by(
-                'module_position')[:1]
+                'module_position').first()
             if next_module is not None:
                 next_lesson = Lesson.objects.filter(module_id=next_module.id).order_by('lesson_position').first()
                 em = EnrolledModule(student_id=current_student, module_id=next_module)

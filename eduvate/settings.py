@@ -147,8 +147,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-STATICFILES_DIRS=[os.path.join(BASE_DIR, "static_dir"),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_dir"),]
 
 
 #Error/succcess messagee
