@@ -1,249 +1,272 @@
 {% extends 'lms/base_student.html' %}
 {% load static %}
-{% block title %}{{course.name}} {% endblock %}
-{% block stylesheet %}{% endblock %}
+{% block title %}{{ course.name }} {% endblock %}
+{% block stylesheet %}<link type="text/css" href="{% static 'assets/css/custom.css' %}" rel="stylesheet">{% endblock %}
 {% block notifications %}{% endblock %}
 {% block usersname_top %}Hasnat Abdullah{% endblock %}
 {% block content %}
 
-        <!-- Header Layout Content -->
-        <div class="mdk-header-layout__content">
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
 
-            <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
-                <div class="mdk-drawer-layout__content page">
+    <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px">
+    <div class="mdk-drawer-layout__content page">
 
-                    <div class="container-fluid page__heading-container">
-                        <div class="page__heading d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-between text-center text-lg-left mb-2 pb-2">
-                            <div>
-                                <h4 class="m-lg-0 text-muted">{{course.name}}</h4>
-                            </div>
-                            <div class="text-muted">
-                                <small>Updated on: {{lesson.updated_on}}</small>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="container-fluid page__container">
-                        <div class="row">
-                            <div class="col-md-8">
-                                {% if lesson.video %}
-                                    <div class="card">
-                                        <div style="line-height: 1.7rem;" class="embed-responsive embed-responsive-16by9">
-                                            {{ lesson.video|safe }}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                                <!---------Lesson body--------->
-                                {% if lesson.lesson_type == 'content' %}
-                                    <div class="card">
-                                        <div class="card-header card-header-tabs-basic nav border-top">
-                                            <div class="flex">
-                                                <h4 class="m-lg-1">{{module.name}}: {{ lesson.title }}</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card-body" id="lesson-content">
-                                            {{ lesson.description|safe }}
-                                        </div>
-                                        <div class="card-header py-0 border-top">
-                                            <div class="text-right" id="next-lesson">
-                                                {% if next_Lesson_id %}
-                                                    <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id  %}" class="m-lg-1 text-white btn btn-primary">
-                                                        Next Lesson<i class="material-icons mr-1">navigate_next</i>
-                                                    </a>
-                                                {% else %}
-                                                    <a href="{%  url 'dashboard'  %}" class="m-lg-1 btn btn-success">
-                                                        Course Complete <i class="material-icons mr-1 ">check_circle</i>
-                                                    </a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% elif lesson.lesson_type == 'scale' %}
-                                    <div class="card card-form" id="lesson-content">
-                                        <div class="card-body">
-                                            <h4><strong class="card-header__title m-0">{{scale.scale_name.name}}</strong></h4>
-                                            <p class="text-muted">{{scale.scale_name.description}}</p>
-                                        </div>
-                                        <div class="card-form__body">
-
-
-                                            <div class="table-responsive border-bottom" >
-                                                <form class="radio-button-form" method="POST">
-                                                    {%  csrf_token %}
-                                                    <table class="table mb-0 thead-border-top-0">
-                                                        <thead>
-                                                        <tr>
-                                                            <th style="width:5px"></th>
-                                                            <th>বিবৃতিসমূহ</th>
-                                                            {% for i in answer %}
-                                                                <th style="width: 24px; text-align: center;">{{i.choice}}</th>
-                                                            {% endfor %}
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody class="list" id="">
-                                                        {% for q in question %}
-                                                            <tr class="questionCount">
-                                                                <td>{{ q.serial }}</td>
-                                                                <td>{{ q.question }}</td>
-                                                                {% for i in answer %}
-                                                                    <td style="text-align: center;"><input type="radio" class ="check" name="{{ q.id }}" id="{{ i.value }}" value="{{ i.value }}" required="required"></td>
-                                                                {% endfor %}
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                    <div class="form-group text-center mb-3">
-                                                        <button class="btn btn-lg btn-block btn-success" type="submit" name="resultButton" id = "totalSum">Submit</button>
-
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <div class="card">
-                                        <div class="card-header card-header-tabs-basic nav border-top">
-                                            <div class="flex">
-                                                <h4 class="m-lg-1">আপনার মতামত</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card-body" id="lesson-content">
-                                            {{ lesson.description|safe }}
-                                            <!---------Feedback Form----------->
-                                            <form action="#" method="POST">
-                                                {% csrf_token %}
-                                                <div class="form-group">
-                                                    <label for="{{ form.quality.id_for_label }}">এই প্রোগ্রামটির গঠন, বিষয়বস্তু, ভাষা তথা সার্বিক গুনাগুন সম্পর্কে আপনার মতামত ০%-১০০% এর মধ্যে প্রকাশ করুন। যেখানে ০% মানে সার্বিক গুনাগুনের সর্বনিম্ন মাত্রা এবং ১০০% মানে  সার্বিক গুনাগুনের সর্বোচ্চ মাত্রা।</label>
-                                                    {{ form.quality }}
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="{{ form.satisfaction.id_for_label }}">এই প্রোগ্রাম-এ আপনি কতটুকু সন্তুষ্ট তা ০%-১০০% এর মধ্যে প্রকাশ করুন। যেখানে ০% মানে সন্তুষ্টির সর্বনিম্ন মাত্রা এবং ১০০% মানে  সন্তুষ্টির সর্বোচ্চ মাত্রা।</label>
-                                                    {{ form.satisfaction }}
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="{{ form.good_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি আপনার কাছে ভালো লেগেছে এবং কেন?</label>
-                                                    {{ form.good_comment }}
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="{{ form.bad_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি আপনার কাছে ভালো লাগেনি এবং কেন লাগেনি? আপনার অভিযোগটি লিখুন। </label>
-                                                    {{ form.bad_comment }}
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="{{ form.opinion.id_for_label }}">এই প্রোগ্রামটি সম্পর্কে আপনার নিজস্ব কোনো মতামত বা পরামর্শ আছে কি? থাকলে সেটি লিখুন।</label>
-                                                    {{ form.opinion }}
-                                                </div>
-                                                <!----------------End form--------------->
-
-                                                <div class="form-group text-center">
-                                                    <button class="btn btn-success btn-lg btn-block mb-3" type="submit">Submit</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-4" data-perfect-scrollbar>
-                                <ul class="list-group list-group-fit pb-2">
-                                    <li class="list-group-item">
-                                        <div class="media">
-                                            <div class="media-left mr-1">
-                                                <div class="text-muted"> </div>
-                                            </div>
-                                            <div class="media-body">
-                                                <h4>{{module.name}}: Lesson List</h4>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {% for l in lesson_list %}
-                                            {% url 'takeCourse' cid=course.id sid=module.id lid=l.id as this_url %}
-                                            {% if request.path == this_url %}
-                                                <li class="list-group-item active">
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <div class="media-left">{{ forloop.counter }}.</div>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <a class="text-white" href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{l.title}}</a>
-                                                        </div>
-                                                        <div class="media-right">
-                                                            {% if request.path != this_url %}
-                                                                <i class="material-icons icon-16pt text-muted">check_circle</i>
-                                                            {% else %}
-                                                                <i class="material-icons icon-16pt text-success">check_circle</i>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            {% else %}
-                                                <li class="list-group-item">
-                                                    <div class="media">
-                                                        <div class="media-left">
-                                                            <div class="text-muted">{{ forloop.counter }}.</div>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <a href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{l.title}}</a>
-                                                        </div>
-                                                    <!--course complete sign
-                                                        <div class="media-right">
-                                                                <i class="material-icons icon-16pt text-muted">check_circle</i>
-                                                        </div> -->
-                                                    </div>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                </ul>
-
-                                <!-- Sessions -->
-                                <div class="card">
-                                    <div class="card-header card-header-large bg-light d-flex align-items-center">
-                                        <div class="flex">
-                                            <h4 class="card-header__title">Session List</h4>
-                                        </div>
-                                    </div>
-
-                                    <ul class="list-group list-group-fit">
-                                        {% for m in module_list %}
-                                        <li class="list-group-item">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <div class="text-muted">{{ forloop.counter }}.</div>
-                                                </div>
-                                                <div class="media-body">
-                                                    <a href="{% url 'CourseSession' cid=course.id sid=m.id %}">{{m.name}}</a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header card-header-large bg-light d-flex align-items-center">
-                                        <div class="flex">
-                                            <h4 class="card-header__title">My Progress</h4>
-                                            <div class="card-subtitle text-muted">Current lesson progress</div>
-                                        </div>
-                                        <div class="ml-auto">
-                                            <a href="#" class="btn {% if percentage_complete == 100 %} btn-success {% else %} btn-light text-muted {% endif %}"><i class="material-icons icon-16pt">check_circle</i> Complete</a>
-                                        </div>
-                                    </div>
-                                    <div class="p-2 px-4 d-flex align-items-center">
-                                        <div class="progress" style="width:100%;height:6px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{percentage_complete}}%;" aria-valuenow="{{percentage_complete}}" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <div class="ml-2 text-primary">
-                                            {{percentage_complete}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+        <div class="container-fluid page__heading-container">
+            <div class="page__heading d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-lg-between text-center text-lg-left mb-2 pb-2">
+                <div>
+                    <h4 class="m-lg-0 text-muted">{{ course.name }}</h4>
                 </div>
-                <!-- // END drawer-layout__content -->
+                <div class="text-muted">
+                    <small>Updated on: {{ lesson.updated_on }}</small>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid page__container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% if lesson.video %}
+                        <div class="card">
+                            <div style="line-height: 1.7rem;" class="embed-responsive embed-responsive-16by9">
+                                {{ lesson.video|safe }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!---------Lesson body--------->
+                    {% if lesson.lesson_type == 'content' %}
+                        <div class="card">
+                            <div class="card-header card-header-tabs-basic nav border-top">
+                                <div class="flex">
+                                    <h4 class="m-lg-1">{{ module.name }}: {{ lesson.title }}</h4>
+                                </div>
+                            </div>
+                            <div class="card-body" id="lesson-content">
+                                {{ lesson.description|safe }}
+                            </div>
+                            <div class="card-header py-0 border-top">
+                                <div class="text-right" id="next-lesson">
+                                    {% if next_Lesson_id %}
+                                        <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id %}"
+                                           class="m-lg-1 text-white btn btn-primary">
+                                            Next Lesson<i class="material-icons mr-1">navigate_next</i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'dashboard' %}" class="m-lg-1 btn btn-success">
+                                            Course Complete <i class="material-icons mr-1 ">check_circle</i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% elif lesson.lesson_type == 'scale' %}
+                        <div class="card card-form" id="lesson-content">
+                            <div class="card-body">
+                                <h4><strong class="card-header__title m-0">{{ scale.scale_name.name }}</strong></h4>
+                                <p class="text-muted">{{ scale.scale_name.description }}</p>
+                            </div>
+                            <div class="card-form__body">
+
+
+                                <div class="table-responsive border-bottom">
+                                    <form class="radio-button-form" method="POST">
+                                        {% csrf_token %}
+                                        <table class="table mb-0 thead-border-top-0">
+                                            <thead>
+                                            <tr>
+                                                <th style="width:5px"></th>
+                                                <th>বিবৃতিসমূহ</th>
+                                                {% for i in answer %}
+                                                    <th style="width: 24px; text-align: center;">{{ i.choice }}</th>
+                                                {% endfor %}
+                                            </tr>
+                                            </thead>
+                                            <tbody class="list" id="">
+                                            {% for q in question %}
+                                                <tr class="questionCount">
+                                                    <td>{{ q.serial }}</td>
+                                                    <td>{{ q.question }}</td>
+                                                    {% for i in answer %}
+                                                        <td style="text-align: center;"><input type="radio"
+                                                                                               class="check"
+                                                                                               name="{{ q.id }}"
+                                                                                               id="{{ i.value }}"
+                                                                                               value="{{ i.value }}"
+                                                                                               required="required"></td>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <div class="form-group text-center mb-3">
+                                            <button class="btn btn-lg btn-block btn-success" type="submit"
+                                                    name="resultButton" id="totalSum">Submit
+                                            </button>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card">
+                            <div class="card-header card-header-tabs-basic nav border-top">
+                                <div class="flex">
+                                    <h4 class="m-lg-1">আপনার মতামত</h4>
+                                </div>
+                            </div>
+                            <div class="card-body" id="lesson-content">
+                                {{ lesson.description|safe }}
+                                <!---------Feedback Form----------->
+                                <form action="#" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="{{ form.quality.id_for_label }}">এই প্রোগ্রামটির গঠন, বিষয়বস্তু,
+                                            ভাষা তথা সার্বিক গুনাগুন সম্পর্কে আপনার মতামত ০%-১০০% এর মধ্যে প্রকাশ করুন।
+                                            যেখানে ০% মানে সার্বিক গুনাগুনের সর্বনিম্ন মাত্রা এবং ১০০% মানে সার্বিক
+                                            গুনাগুনের সর্বোচ্চ মাত্রা।</label>
+                                        {{ form.quality }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form.satisfaction.id_for_label }}">এই প্রোগ্রাম-এ আপনি কতটুকু
+                                            সন্তুষ্ট তা ০%-১০০% এর মধ্যে প্রকাশ করুন। যেখানে ০% মানে সন্তুষ্টির
+                                            সর্বনিম্ন মাত্রা এবং ১০০% মানে সন্তুষ্টির সর্বোচ্চ মাত্রা।</label>
+                                        {{ form.satisfaction }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form.good_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি
+                                            আপনার কাছে ভালো লেগেছে এবং কেন?</label>
+                                        {{ form.good_comment }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form.bad_comment.id_for_label }}">এই প্রোগ্রামটির কোন জায়গাটি
+                                            আপনার কাছে ভালো লাগেনি এবং কেন লাগেনি? আপনার অভিযোগটি লিখুন। </label>
+                                        {{ form.bad_comment }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="{{ form.opinion.id_for_label }}">এই প্রোগ্রামটি সম্পর্কে আপনার
+                                            নিজস্ব কোনো মতামত বা পরামর্শ আছে কি? থাকলে সেটি লিখুন।</label>
+                                        {{ form.opinion }}
+                                    </div>
+                                    <!----------------End form--------------->
+
+                                    <div class="form-group text-center">
+                                        <button class="btn btn-success btn-lg btn-block mb-3" type="submit">Submit
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4" data-perfect-scrollbar>
+                    <ul class="list-group list-group-fit pb-2">
+                        <li class="list-group-item">
+                            <div class="media">
+                                <div class="media-left mr-1">
+                                    <div class="text-muted"></div>
+                                </div>
+                                <div class="media-body">
+                                    <h4>{{ module.name }}: Lesson List</h4>
+                                </div>
+                            </div>
+                        </li>
+                        {% for l in lesson_list %}
+                            {% url 'takeCourse' cid=course.id sid=module.id lid=l.id as this_url %}
+                            {% if request.path == this_url %}
+                                <li class="list-group-item active">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="media-left">{{ forloop.counter }}.</div>
+                                        </div>
+                                        <div class="media-body">
+                                            <a class="text-white"
+                                               href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{ l.title }}</a>
+                                        </div>
+                                        <div class="media-right">
+                                            {% if request.path != this_url %}
+                                                <i class="material-icons icon-16pt text-muted">check_circle</i>
+                                            {% else %}
+                                                <i class="material-icons icon-16pt text-success">check_circle</i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="text-muted">{{ forloop.counter }}.</div>
+                                        </div>
+                                        <div class="media-body">
+                                            <a href="{% url 'takeCourse' cid=course.id sid=module.id lid=l.id %}">{{ l.title }}</a>
+                                        </div>
+                                        <!--course complete sign
+                                            <div class="media-right">
+                                                    <i class="material-icons icon-16pt text-muted">check_circle</i>
+                                            </div> -->
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Sessions -->
+                    <div class="card">
+                        <div class="card-header card-header-large bg-light d-flex align-items-center">
+                            <div class="flex">
+                                <h4 class="card-header__title">Session List</h4>
+                            </div>
+                        </div>
+
+                        <ul class="list-group list-group-fit">
+                            {% for m in module_list %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="text-muted">{{ forloop.counter }}.</div>
+                                        </div>
+                                        <div class="media-body">
+                                            <a href="{% url 'CourseSession' cid=course.id sid=m.id %}">{{ m.name }}</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header card-header-large bg-light d-flex align-items-center">
+                            <div class="flex">
+                                <h4 class="card-header__title">My Progress</h4>
+                                <div class="card-subtitle text-muted">Current lesson progress</div>
+                            </div>
+                            <div class="ml-auto">
+                                <a href="#"
+                                   class="btn {% if percentage_complete == 100 %} btn-success {% else %} btn-light text-muted {% endif %}"><i
+                                        class="material-icons icon-16pt">check_circle</i> Complete</a>
+                            </div>
+                        </div>
+                        <div class="p-2 px-4 d-flex align-items-center">
+                            <div class="progress" style="width:100%;height:6px;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                     style="width: {{ percentage_complete }}%;"
+                                     aria-valuenow="{{ percentage_complete }}" aria-valuemin="0"
+                                     aria-valuemax="100"></div>
+                            </div>
+                            <div class="ml-2 text-primary">
+                                {{ percentage_complete }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- // END drawer-layout__content -->
 {% endblock %}
 
 {% block usersname %}Hasnat Abdullah{% endblock %}
@@ -263,11 +286,12 @@
                         <h3 id="score" class="text-white mt-3">Score</h3>
                         <h2 id='level' class="text-warning mt-3">Result</h2>
                         {% if next_Lesson_id %}
-                            <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id  %}" class="m-lg-1 btn btn-light my-2">
+                            <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id %}"
+                               class="m-lg-1 btn btn-light my-2">
                                 Next Lesson<i class="material-icons mr-1">navigate_next</i>
                             </a>
                         {% else %}
-                            <a href="{%  url 'dashboard'  %}" class="m-lg-1 btn btn-success">
+                            <a href="{% url 'dashboard' %}" class="m-lg-1 btn btn-success">
                                 Course Complete <i class="material-icons mr-1 ">check_circle</i>
                             </a>
                         {% endif %}
@@ -279,63 +303,80 @@
 {% endblock %}
 {% block javascript %}
     {% if lesson.lesson_type == 'scale' %}
-    <script>
-        $(".radio-button-form").submit(function(e){
-            let chk = document.querySelectorAll(".check:checked");
-            let allRadioButton = document.querySelectorAll(".questionCount");
-            let total = 0;
-            let result = "OK";
-            if(chk.length !== allRadioButton.length){
-                return false;
-            }
-            else{
-                chk.forEach(function(el){
-                    total += parseInt(el.getAttribute('value'));
-                });
+        <script>
+            $(".radio-button-form").submit(function (e) {
+                let chk = document.querySelectorAll(".check:checked");
+                let allRadioButton = document.querySelectorAll(".questionCount");
+                let total = 0;
+                let result = "OK";
+                if (chk.length !== allRadioButton.length) {
+                    return false;
+                } else {
+                    chk.forEach(function (el) {
+                        total += parseInt(el.getAttribute('value'));
+                    });
 
-            {% for s in score %}
-                if (total<={{ s.to_value }} && total>={{ s.from_value }}){
-                    result ="{{ s.result }}";
+                    {% for s in score %}
+                        if (total <= {{ s.to_value }} && total >={{ s.from_value }}) {
+                            result = "{{ s.result }}";
+                        }
+                    {% endfor %}
+                    document.getElementById("score").innerHTML = "Score: " + total;
+                    document.getElementById("level").innerHTML = "Level: " + result;
+                    $("#modal-success").modal();
+                    //Data send to server to save
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'saveScore' scaleId=scale.id %}',
+                        data: {
+                            score: total,
+                            result: result,
+                            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                        },
+                        success: function () {
+                            console.log("success");
+                        },
+                        error: function (data) {
+                            console.log("error");
+                        }
+                    });
+                    e.preventDefault();
                 }
-            {% endfor %}
-                document.getElementById("score").innerHTML = "Score: "+total;
-                document.getElementById("level").innerHTML = "Level: "+result;
-                $("#modal-success").modal();
-                //Data send to server to save
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url 'saveScore' scaleId=scale.id %}',
-                    data: {
-                        score: total,
-                        result: result,
-                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
-                    },
-                    success:function() {
-                        console.log("success");
-                    },
-                    error: function(data) {
-                        console.log("error");
-                    }
-                });
-                e.preventDefault();
-            }
-        });
-    </script>
+            });
+        </script>
     {% endif %}
     <script>
-        $(document).on('submit', '#user-input-form',function(e){
+        function objectifyForm(formArray) {
+            var returnArray = {};
+            for (var i = 0; i < formArray.length; i++) {
+                if (formArray[i].value) {
+                    returnArray[formArray[i].name] = formArray[i].value;
+                }
+            }
+            return returnArray;
+        }
+
+        $(document).on('submit', '#user-input-form', function (e) {
+            csrfmiddlewaretoken = $("#user-input-form").find("input[name='csrfmiddlewaretoken']").val();
+            var formData = $("#user-input-form").serializeArray();
+            formData = objectifyForm(formData);
+            formData = JSON.stringify(formData);
 
             $.ajax({
-                type:'POST',
-                url:'{% url 'saveUserInput' lessonId=lesson.id %}',
-                data:$("#user-input-form").serialize(),
-                dataType:'json',
+                type: 'POST',
+                url: '{% url 'saveUserInput' lessonId=lesson.id %}',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: {
+                    "csrfmiddlewaretoken": "{{ csrf_token }}",
+                    "form_data": formData,
+                },
+                dataType: 'json',
 
-                success:function(){
+                success: function () {
                     document.getElementById("lesson-content").innerHTML = "<h2 style='color: green;'><i class='material-icons mr-1'>check_circle</i> Successfully Submitted</h2>";
                     console.log("success!")
                 },
-                error : function() {
+                error: function () {
                     console.log("Failed! Not saved"); // provide a bit more info about the error to the console
                 }
             });

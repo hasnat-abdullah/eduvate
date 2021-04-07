@@ -12,8 +12,7 @@ from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +27,7 @@ SECRET_KEY = 'oer7^lh+%d-xvw22!6fk6w)zwrklz=q$giu2thps=99z*gt=rc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['monerdr.herokuapp.com','127.0.0.1',]
+ALLOWED_HOSTS = ['monerdr.herokuapp.com', '127.0.0.1', ]
 
 # Application definition
 
@@ -42,21 +41,26 @@ INSTALLED_APPS = [
     'eduvateApp',
     'apis',
 
-    #3rd party App
+    # 3rd party App
     'ckeditor',
     'ckeditor_uploader',
 ]
 
 ####################################
-    ##  CKEDITOR CONFIGURATION ##
+##  CKEDITOR CONFIGURATION ##
 ####################################
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'height': 200,
-        'width': 850,
+        # 'height': 200,
+        'width': '100%',
+        'extraPlugins': ','.join(
+            [
+                'pastefromgdocs','uploadfile','youtube','inserthtml4x'
+            ]
+        ),
     },
 }
 CKEDITOR_IMAGE_BACKEND = "pillow"
@@ -91,7 +95,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eduvate.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -105,7 +108,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -125,7 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -139,7 +140,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -147,10 +147,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_dir"),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_dir"), ]
 
-
-#Error/succcess messagee
+# Error/succcess messagee
 MESSAGE_TAGS = {
     messages.INFO: 'alert alert-info',
     messages.SUCCESS: 'alert alert-success',

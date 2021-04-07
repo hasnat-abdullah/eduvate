@@ -20,11 +20,13 @@ class IndexView(ListView):
     context_object_name = 'course'
 
 
+@method_decorator(login_required, name='dispatch')
 class DashboardView(View):
     template_name = 'lms/student-dashboard.html'
 
     def get(self, request):
-        course = EnrolledCourse.objects.filter(student_id=request.user.id).order_by('-enrolled_on').select_related(
+        student = get_object_or_404(Student, name=request.user)
+        course = EnrolledCourse.objects.filter(student_id=student).order_by('-enrolled_on').select_related(
             'course_id')
         context = {
             'course': course,
@@ -33,28 +35,38 @@ class DashboardView(View):
         return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class EnrollCourseView(View):
 
     @transaction.atomic
     def get(self, request, id):
-        current_student = get_object_or_404(Student, name=request.user.id)
-        course = get_object_or_404(Course, id=id)
+        print(request.user)
+        try:
+            current_student = Student.objects.get(name=request.user)
+            course = Course.objects.get(id=id)
+        except Student.DoesNotExist:
+            return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! You are not registered as Student.</h1>', status=400)
+        except Course.DoesNotExist:
+            return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! There is no such Course</h1>', status=400)
+        except Exception as ex:
+            print(ex)
+            return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! Something Wrong.</h1>', status=400)
 
-        first_module = CourseModule.objects.filter(course=course.id).order_by('module_position').first()
+        first_module = CourseModule.objects.filter(course=course).order_by('module_position').first()
 
-        first_lesson = Lesson.objects.filter(module_id=first_module.id).order_by('lesson_position').first()
+        first_lesson = Lesson.objects.filter(module_id=first_module).order_by('lesson_position').first()
 
         if first_module is None:
             return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! There is no Module/Session for this Course</h1>', status=400)
         elif first_lesson is None:
             return HttpResponse('<h1 style="color:red; text-align: center;">SORRY! There is no Lesson for this Course</h1>', status=400)
 
-        if not (EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()):
+        if not (EnrolledCourse.objects.filter(student_id=current_student, course_id=course).exists()):
             ec = EnrolledCourse(student_id=current_student, course_id=course, percent_complited=0)
             ec.save()
             em = EnrolledModule(student_id=current_student, module_id=first_module)
             em.save()
-            # last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student.id,lesson_id__module_id__course__id=course.id).order_by('lesson_id__lesson_position')[:1]
+            # last_completed_lesson=CompletedLesson.objects.filter(student_id=current_student,lesson_id__module_id__course__id=course).order_by('lesson_id__lesson_position')[:1]
 
         return redirect('takeCourse', cid=course.id, sid=first_module.id, lid=first_lesson.id)
 
@@ -66,8 +78,8 @@ class CourseDetailsView(View):
     def get(self, request, id):
         course = get_object_or_404(Course, id=id)
 
-        instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
-        module = CourseModule.objects.filter(course=course.id)
+        instructor = CourseInstructor.objects.filter(course_id=course).select_related('instructor_id')
+        module = CourseModule.objects.filter(course=course)
         first_module = module.first()
         totalModule = len(module)
 
@@ -83,8 +95,8 @@ class CourseDetailsView(View):
         }
         try:
             if request.user.is_authenticated:
-                current_student = Student.objects.get(name=request.user.id)
-                is_enrolled = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id).exists()
+                current_student = Student.objects.get(name=request.user)
+                is_enrolled = EnrolledCourse.objects.filter(student_id=current_student, course_id=course).exists()
                 context['is_enrolled'] = is_enrolled
                 return render(request, self.authenticated_template, context)
         except Student.DoesNotExist:
@@ -98,11 +110,11 @@ class CourseSessionView(View):
 
     def get(self, request, cid, sid):
         course = get_object_or_404(Course, id=cid)
-        current_student = get_object_or_404(Student, name=request.user.id)
+        current_student = get_object_or_404(Student, name=request.user)
         module = get_object_or_404(CourseModule, id=sid)
-        instructor = CourseInstructor.objects.filter(course_id=course.id).select_related('instructor_id')
-        module_list = CourseModule.objects.filter(course=course.id)
-        lesson = Lesson.objects.filter(module_id=module.id).first()
+        instructor = CourseInstructor.objects.filter(course_id=course).select_related('instructor_id')
+        module_list = CourseModule.objects.filter(course=course)
+        lesson = Lesson.objects.filter(module_id=module).first()
 
         return redirect('takeCourse', cid=course.id, sid=module.id, lid=lesson.id)
 
@@ -112,7 +124,8 @@ class RunningCourseView(View):
     template_name = 'lms/student-running-courses.html'
 
     def get(self, request):
-        course = EnrolledCourse.objects.filter(student_id=request.user.id) \
+        student = get_object_or_404(Student, name=request.user)
+        course = EnrolledCourse.objects.filter(student_id=student) \
             .order_by('-enrolled_on').select_related('course_id')
 
         context = {
@@ -127,7 +140,7 @@ class TakeCourseView(View):
     def get_data_from_db(self, request, cid, sid, lid):
         data = {
             'course' : get_object_or_404(Course, id=cid),
-            'current_student' : get_object_or_404(Student, name=request.user.id),
+            'current_student' : get_object_or_404(Student, name=request.user),
             'module' : get_object_or_404(CourseModule, id=sid),
             'lesson' : get_object_or_404(Lesson, id=lid)
         }
@@ -149,11 +162,11 @@ class TakeCourseView(View):
             # if no next lesson found, update module status 'completed'
             enrolled_module.enrolment_status = 'completed'
             enrolled_module.save()
-            next_module = CourseModule.objects.filter(course=course.id,
+            next_module = CourseModule.objects.filter(course=course,
                                                       module_position__gt=module.module_position).order_by(
                 'module_position').first()
             if next_module is not None:
-                next_lesson = Lesson.objects.filter(module_id=next_module.id).order_by('lesson_position').first()
+                next_lesson = Lesson.objects.filter(module_id=next_module).order_by('lesson_position').first()
                 em = EnrolledModule(student_id=current_student, module_id=next_module)
                 em.save()
                 if next_lesson is not None:
@@ -163,49 +176,57 @@ class TakeCourseView(View):
     def get(self, request, cid, sid, lid):
         data = self.get_data_from_db(request, cid, sid, lid)
         course = data.get('course')
-        current_student = data.get('current_student')
+        student = data.get('current_student')
         module = data.get('module')
         lesson = data.get('lesson')
 
-        enrolled_module = EnrolledModule.objects.filter(student_id=current_student.id, module_id=module.id)\
+        enrolled_module = EnrolledModule.objects.filter(student_id=student, module_id=module)\
             .order_by('-enrolled_module_on').first()
-        enrolled_course = EnrolledCourse.objects.filter(student_id=current_student.id, course_id=course.id)\
+        enrolled_course = EnrolledCourse.objects.filter(student_id=student, course_id=course)\
             .order_by('-enrolled_on').first()
 
         # ---if the student does not enrolled in requested course---
         if enrolled_course is None:
+            print("Stopped in enrolled course")
             return redirect('singleCourse', cid)
 
         # ---if the student does not enrolled in requested module---
         if enrolled_module is None:
+            print("Stopped in enrolled moduke")
             return redirect('denied')
 
+        print(f"Lesson position: {lesson.lesson_position}")
         # ---if the student does not enrolled in this course---
-        if not (lesson.lesson_position == 1 or CompletedLesson.objects.filter(student_id=current_student.id,
-                                                                              lesson_id__module_id=module.id,
+        if not (lesson.lesson_position == 1 or CompletedLesson.objects.filter(student_id=student,
+                                                                              lesson_id__module_id=module,
                                                                               lesson_id__lesson_position=lesson.lesson_position - 1).exists()):
+            print(lesson.lesson_position == 1)
+            print(CompletedLesson.objects.filter(student_id=student,
+                                                                              lesson_id__module_id=module,
+                                                                              lesson_id__lesson_position=lesson.lesson_position - 1).exists())
+            print("Stopped in not finished older lesson")
             return redirect('denied')
 
-        module_list = CourseModule.objects.filter(course=course.id)
-        lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')
-        total_lesson = Lesson.objects.filter(module_id__course__id=course.id).count()
-        total_completed_lesson = CompletedLesson.objects.filter(student_id=request.user.id,
-                                                                lesson_id__module_id__course__id=course.id).count()
+        module_list = CourseModule.objects.filter(course=course)
+        lesson_list = Lesson.objects.filter(module_id=module).order_by('lesson_position')
+        total_lesson = Lesson.objects.filter(module_id__course=course).count()
+        total_completed_lesson = CompletedLesson.objects.filter(student_id=student,
+                                                                lesson_id__module_id__course=course).count()
         percentage_complete = int((total_completed_lesson * 100) / total_lesson)
 
         enrolled_course.percent_complited = percentage_complete
         enrolled_course.save()
         ######-----Mark as complete this lesson------####
-        obj, created = CompletedLesson.objects.update_or_create(student_id=current_student, lesson_id=lesson)
+        obj, created = CompletedLesson.objects.update_or_create(student_id=student, lesson_id=lesson)
         scale = ''
         question = ''
         answer = ''
         score = ''
         if lesson.lesson_type == 'scale':
-            scale = LessonScale.objects.get(lesson_id=lesson.id)
-            question = QuestionDetails.objects.filter(scale_id=scale.scale_name.id).order_by('serial')
-            answer = AnswerDetails.objects.filter(scale_id=scale.scale_name.id).order_by('serial')
-            score = ScoringDetails.objects.filter(scale_id=scale.scale_name.id).order_by('-to_value')
+            scale = LessonScale.objects.get(lesson_id=lesson)
+            question = QuestionDetails.objects.filter(scale_id=scale.scale_name).order_by('serial')
+            answer = AnswerDetails.objects.filter(scale_id=scale.scale_name).order_by('serial')
+            score = ScoringDetails.objects.filter(scale_id=scale.scale_name).order_by('-to_value')
 
         next_Lesson_id, next_module_id = self.get_value_to_get_next_lesson_url(
                                                             module=module,
@@ -213,7 +234,7 @@ class TakeCourseView(View):
                                                             lesson_list=lesson_list,
                                                             enrolled_module=enrolled_module,
                                                             course=course,
-                                                            current_student=current_student
+                                                            current_student=student
                                                         )
 
         ######-----Mark as complete this course if there is no lesson left------####
@@ -249,9 +270,9 @@ class TakeCourseView(View):
         module = data.get('module')
         lesson = data.get('lesson')
 
-        enrolled_module = EnrolledModule.objects.filter(student_id=current_student.id, module_id=module.id) \
+        enrolled_module = EnrolledModule.objects.filter(student_id=current_student, module_id=module) \
             .order_by('-enrolled_module_on').first()
-        lesson_list = Lesson.objects.filter(module_id=module.id).order_by('lesson_position')
+        lesson_list = Lesson.objects.filter(module_id=module).order_by('lesson_position')
 
         next_Lesson_id, next_module_id = self.get_value_to_get_next_lesson_url(
             module=module,
@@ -284,10 +305,11 @@ class SaveLessonFeedbackView(View):
 
     @csrf_exempt
     def post(self, request, lessonId):
-        user = request.user.id
+        user = request.user
         lesson = get_object_or_404(Lesson, id=lessonId)
         student = get_object_or_404(Student, name=user)
-        inputtedData = request.POST
+        inputtedData = request.POST.get('form_data', None)
+        print(inputtedData)
         inputToSave = LessonFeedbackCollection.objects.create(
             student_id=student,
             lesson=lesson,
@@ -341,9 +363,9 @@ class ScaleDetailsView(View):
 
     def get(self, request, scaleId):
         scale = get_object_or_404(MeasuringScale, id=scaleId)
-        question = QuestionDetails.objects.filter(scale_id=scale.id).order_by('serial')
-        answer = AnswerDetails.objects.filter(scale_id=scale.id).order_by('serial')
-        score = ScoringDetails.objects.filter(scale_id=scale.id).order_by('-to_value')
+        question = QuestionDetails.objects.filter(scale_id=scale).order_by('serial')
+        answer = AnswerDetails.objects.filter(scale_id=scale).order_by('serial')
+        score = ScoringDetails.objects.filter(scale_id=scale).order_by('-to_value')
         context = {
             'scale': scale,
             'question': question,
@@ -361,7 +383,6 @@ class ScaleDetailsView(View):
 class SaveScoreView(View):
 
     def post(self, request, scaleId):
-        user = request.user.username
         scale = MeasuringScale.objects.filter(id=scaleId).first()
         if scale is not None:
             scaleToSave = MeasuringScaleForModuleResult.objects.create_score(
@@ -381,7 +402,7 @@ class TestResultView(View):
     template_name = 'lms/student-test-result.html'
 
     def get(self, request):
-        test_result = MeasuringScaleForModuleResult.objects.filter(user_id=request.user.id).order_by('-created_on')
+        test_result = MeasuringScaleForModuleResult.objects.filter(user_id=request.user).order_by('-created_on')
         context = {
             'test_result': test_result,
             'self_test_result_active': 'active'

@@ -33,8 +33,6 @@
 
 {% endblock %}
 {%  if request.user.is_authenticated  %}
-    {% block usersrole %}Administrator{% endblock %}
-    {% block usersrole2 %}Administrator{% endblock %}
     {% block todoblock %}{% endblock %}
 {% endif %}
 {% block modal %}
