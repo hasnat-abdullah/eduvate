@@ -196,6 +196,7 @@ class CourseModule(models.Model):
 
 LESSON_CHOICE = (
     ('content', 'Content'),
+    ('contform', 'Form inside content'),
     ('scale', 'Scale'),
     ('feedback', 'Feedback Form')
 )

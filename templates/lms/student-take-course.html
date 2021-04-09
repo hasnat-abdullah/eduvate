@@ -35,7 +35,7 @@
                         </div>
                     {% endif %}
                     <!---------Lesson body--------->
-                    {% if lesson.lesson_type == 'content' %}
+                    {% if lesson.lesson_type == 'content' or lesson.lesson_type == 'contform' %}
                         <div class="card">
                             <div class="card-header card-header-tabs-basic nav border-top">
                                 <div class="flex">
@@ -48,12 +48,12 @@
                             <div class="card-header py-0 border-top">
                                 <div class="text-right" id="next-lesson">
                                     {% if next_Lesson_id %}
-                                        <a href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id %}"
+                                        <a id="next_button" href="{% url 'takeCourse' cid=course.id sid=next_module_id lid=next_Lesson_id %}"
                                            class="m-lg-1 text-white btn btn-primary">
                                             Next Lesson<i class="material-icons mr-1">navigate_next</i>
                                         </a>
                                     {% else %}
-                                        <a href="{% url 'dashboard' %}" class="m-lg-1 btn btn-success">
+                                        <a id="next_button" href="{% url 'dashboard' %}" class="m-lg-1 btn btn-success">
                                             Course Complete <i class="material-icons mr-1 ">check_circle</i>
                                         </a>
                                     {% endif %}
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                         </div>
-                    {% else %}
+                    {% elif lesson.lesson_type == 'feedback' %}
                         <div class="card">
                             <div class="card-header card-header-tabs-basic nav border-top">
                                 <div class="flex">
@@ -264,7 +264,6 @@
             </div>
         </div>
 
-
     </div>
     <!-- // END drawer-layout__content -->
 {% endblock %}
@@ -302,6 +301,14 @@
     {% endif %}
 {% endblock %}
 {% block javascript %}
+    {% if lesson.lesson_type == 'contform' %}
+        <script>
+            try {
+                document.getElementById('next_button').style.visibility = "hidden";
+                console.log("Hide next button")
+            } catch (err) {}
+        </script>
+    {% endif %}
     {% if lesson.lesson_type == 'scale' %}
         <script>
             $(".radio-button-form").submit(function (e) {
@@ -375,6 +382,7 @@
                 success: function () {
                     document.getElementById("lesson-content").innerHTML = "<h2 style='color: green;'><i class='material-icons mr-1'>check_circle</i> Successfully Submitted</h2>";
                     console.log("success!")
+                    document.getElementById('next_button').style.visibility = "visible";
                 },
                 error: function () {
                     console.log("Failed! Not saved"); // provide a bit more info about the error to the console
