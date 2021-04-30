@@ -44,7 +44,11 @@ INSTALLED_APPS = [
     # 3rd party App
     'ckeditor',
     'ckeditor_uploader',
+    'crispy_forms'
 ]
+
+# ----- Crispy Form -----
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 ####################################
 ##  CKEDITOR CONFIGURATION ##
