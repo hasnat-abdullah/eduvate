@@ -202,6 +202,14 @@ LESSON_CHOICE = (
 )
 
 
+class HomeworkTemplate(models.Model):
+    homework_name = models.CharField(max_length=200)
+    template_name = models.CharField(max_length=249)
+
+    def __str__(self):
+        return self.homework_name
+
+
 class Lesson(models.Model):
     module_id = models.ForeignKey(CourseModule, on_delete=models.CASCADE, default=1)
     lesson_type = models.CharField(max_length=8, choices=LESSON_CHOICE, default='content')
@@ -211,6 +219,7 @@ class Lesson(models.Model):
     description = RichTextUploadingField(null=True)
     created_on = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True, auto_now_add=False)
+    homework_list = models.ManyToManyField(HomeworkTemplate, blank=True, default=None )
 
     def __str__(self):
         return self.module_id.course.name + ": " + self.module_id.name + ": " + self.title
@@ -533,12 +542,6 @@ class Feedback(models.Model):
         return self.course_id.name + " : " + self.student_id.name.username
 
 
-# class LessonFeedbackManager(models.Manager):
-#     # def create_lesson_input(self, username, lesson_id, data):
-#     #     lesson_input = self.create(userId=username, lesson=lesson_id, data=data, created_on=datetime.now)
-#     #     return lesson_input
-
-
 class LessonFeedbackCollection(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
@@ -557,4 +560,20 @@ class LessonFeedbackCollection(models.Model):
     def courseAndModuleAnsLessonName(self):
         return self.lesson.module_id.course.name + " : " + self.lesson.module_id.name + " : " + self.lesson.title
 
-    #objects = LessonFeedbackManager()
+
+# ================================#
+# =============Homework===========#
+# ================================#
+class PhychologistFeedbackOnHomework():
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    homework_data = JSONField(null=True, blank=True)
+    percentage_completed = models.IntegerField(default=0)
+    is_fully_completed = models.BooleanField(default=False)
+    feedback_data = JSONField(null=True, blank=True)
+    feedback_given_by = models.CharField(max_length=249, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return f"{self.student_id.name}: {self.lesson.module_id.course.name}-{self.lesson.module_id.name}-{self.lesson.title} #complete:{self.percentage_completed}%"
